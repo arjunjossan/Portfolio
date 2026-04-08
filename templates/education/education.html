@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="px-4 pb-20 pt-32 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        {% include "includes/breadcrumb.html" %}
+        <div class="section-heading">
+            <span class="section-kicker">Education</span>
+            <h1 class="section-title">Academic background, performance, and the foundation behind my technical growth.</h1>
+        </div>
+        <div class="mt-12 space-y-6">
+            {% for education in education_list %}
+                <article class="content-panel">
+                    <div class="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+                        <div class="overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/5">
+                            {% if education.institution_logo %}
+                                <img src="{{ education.institution_logo.url }}" alt="{{ education.institution_name }}" class="h-56 w-full object-cover">
+                            {% else %}
+                                <div class="flex h-56 items-center justify-center bg-[linear-gradient(160deg,_rgba(29,157,139,0.18),_rgba(56,189,248,0.12)),linear-gradient(140deg,_#0f172a_0%,_#08111f_100%)] px-6 text-center">
+                                    <div>
+                                        <p class="font-display text-2xl font-semibold text-white">{{ education.institution_name }}</p>
+                                        <p class="mt-2 text-sm uppercase tracking-[0.2em] text-slate-300">{{ education.field_of_study }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                <div>
+                                    <h2 class="font-display text-2xl font-semibold text-white">{{ education.degree_name }}</h2>
+                                    <p class="mt-2 text-slate-300">{{ education.institution_name }} • {{ education.field_of_study }}</p>
+                                    <p class="mt-1 text-sm text-slate-400">{{ education.location }}</p>
+                                </div>
+                                <div class="text-sm text-slate-400">
+                                    <p>{{ education.start_date|date:"Y" }} - {{ education.end_date|date:"Y" }}</p>
+                                    {% if education.gpa_cgpa %}<p class="mt-2 font-semibold text-white">{{ education.gpa_cgpa }}</p>{% endif %}
+                                </div>
+                            </div>
+                            <div class="mt-5 grid gap-3">{% for highlight in education.highlights %}<div class="rounded-2xl border border-white/10 bg-slate-900/70 p-4 text-sm leading-7 text-slate-300">{{ highlight }}</div>{% endfor %}</div>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+
+            {% if certification_list %}
+                <section class="pt-6">
+                    <div class="section-heading max-w-3xl">
+                        <span class="section-kicker">Certifications</span>
+                        <h2 class="section-title text-3xl">Credentials and extra proof of hands-on learning.</h2>
+                    </div>
+                    <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {% for certification in certification_list %}
+                            <article class="content-panel">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div>
+                                        <h3 class="font-display text-xl font-semibold text-white">{{ certification.title }}</h3>
+                                        <p class="mt-2 text-slate-300">{{ certification.issuer }}</p>
+                                    </div>
+                                    <p class="text-sm uppercase tracking-[0.2em] text-slate-400">{{ certification.issue_date|date:"M Y" }}</p>
+                                </div>
+                                <p class="mt-4 text-sm leading-7 text-slate-300">{{ certification.description }}</p>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

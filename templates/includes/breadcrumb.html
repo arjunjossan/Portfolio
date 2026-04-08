@@ -1,0 +1,15 @@
+<nav aria-label="Breadcrumb" class="mb-8 text-sm text-slate-400">
+    <ol class="flex flex-wrap items-center gap-2">
+        <li><a href="{% url 'portfolio_app:home' %}" class="transition hover:text-white">Home</a></li>
+        {% for crumb in breadcrumbs %}
+            <li class="text-slate-500">/</li>
+            <li>
+                {% if crumb.url %}
+                    <a href="{{ crumb.url }}" class="transition hover:text-white">{{ crumb.label }}</a>
+                {% else %}
+                    <span class="text-slate-200">{{ crumb.label }}</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</nav>

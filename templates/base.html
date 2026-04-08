@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ page_meta.meta_title|default:site_config.seo_title|default:"Portfolio" }}{% endblock %}</title>
+    <meta name="description" content="{{ page_meta.meta_description|default:site_config.seo_description|default:'Professional portfolio website built with Django.' }}">
+    <meta name="keywords" content="{{ page_meta.meta_keywords|default:site_config.seo_keywords|default:'portfolio,django,developer' }}">
+    <meta name="theme-color" content="#0f172a">
+    <meta property="og:title" content="{{ page_meta.meta_title|default:site_config.seo_title|default:'Portfolio' }}">
+    <meta property="og:description" content="{{ page_meta.og_description|default:page_meta.meta_description|default:site_config.seo_description|default:'Professional portfolio website.' }}">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                container: {
+                    center: true,
+                    padding: {
+                        DEFAULT: '1rem',
+                        sm: '1.5rem',
+                        lg: '2rem',
+                        xl: '2.5rem',
+                    },
+                    screens: {
+                        '2xl': '1280px',
+                    },
+                },
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef9ff',
+                            100: '#d9f1ff',
+                            200: '#bce7ff',
+                            300: '#8cd8ff',
+                            400: '#56c0ff',
+                            500: '#2ca5f5',
+                            600: '#1683d6',
+                            700: '#1268ad',
+                            800: '#14588f',
+                            900: '#164875',
+                            950: '#0c2944',
+                            DEFAULT: '#2ca5f5',
+                        },
+                        secondary: {
+                            50: '#ecfdf8',
+                            100: '#d1faef',
+                            200: '#a8f5e0',
+                            300: '#72ead0',
+                            400: '#39d5bb',
+                            500: '#16b8a0',
+                            600: '#109181',
+                            700: '#117468',
+                            800: '#125c53',
+                            900: '#114c46',
+                            950: '#042d2b',
+                            DEFAULT: '#16b8a0',
+                        },
+                        accent: {
+                            50: '#fff7ed',
+                            100: '#ffeed4',
+                            200: '#ffd9a8',
+                            300: '#ffbc70',
+                            400: '#ff9337',
+                            500: '#ff7411',
+                            600: '#f25807',
+                            700: '#c94109',
+                            800: '#9f3410',
+                            900: '#7f2d11',
+                            950: '#451306',
+                            DEFAULT: '#ff7411',
+                        },
+                        ink: '#08111f',
+                        mist: '#edf4ff',
+                        teal: '#1d9d8b',
+                        ember: '#f97316',
+                        sand: '#f7f5ef',
+                        app: {
+                            bg: {
+                                light: '#f6f8fc',
+                                dark: '#050816',
+                            },
+                            surface: {
+                                light: 'rgba(255,255,255,0.78)',
+                                dark: 'rgba(12,18,36,0.72)',
+                            },
+                            border: {
+                                light: 'rgba(15,23,42,0.08)',
+                                dark: 'rgba(255,255,255,0.12)',
+                            },
+                            text: {
+                                primaryLight: '#0f172a',
+                                primaryDark: '#e5eefc',
+                                secondaryLight: '#334155',
+                                secondaryDark: '#c1d0ea',
+                                mutedLight: '#64748b',
+                                mutedDark: '#8da2c0',
+                            },
+                        },
+                    },
+                    fontFamily: {
+                        display: ['Space Grotesk', 'sans-serif'],
+                        body: ['Manrope', 'sans-serif'],
+                        cover: ['Cormorant Garamond', 'serif'],
+                        editorial: ['Playfair Display', 'serif'],
+                    },
+                    boxShadow: {
+                        soft: '0 18px 60px rgba(8, 15, 35, 0.12)',
+                        glass: '0 24px 80px rgba(6, 12, 28, 0.28)',
+                        lift: '0 16px 44px rgba(8, 15, 35, 0.18)',
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                        '5xl': '2.5rem',
+                    },
+                    backgroundImage: {
+                        'hero-mesh-dark': 'radial-gradient(circle at top left, rgba(44,165,245,0.18), transparent 28%), radial-gradient(circle at top right, rgba(22,184,160,0.14), transparent 24%), linear-gradient(180deg, #050816 0%, #0a1020 52%, #050816 100%)',
+                        'hero-mesh-light': 'radial-gradient(circle at top left, rgba(44,165,245,0.14), transparent 26%), radial-gradient(circle at top right, rgba(22,184,160,0.12), transparent 24%), linear-gradient(180deg, #f8fbff 0%, #eef4fb 52%, #f8fbff 100%)',
+                        'brand-gradient': 'linear-gradient(135deg, rgba(44,165,245,0.96) 0%, rgba(22,184,160,0.96) 100%)',
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="{% static 'css/theme-system.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-slate-950 font-body text-slate-100 selection:bg-teal/30 selection:text-white">
+    <div class="site-shell">
+        {% include "includes/header.html" %}
+        <main>
+            {% if messages %}
+                <div class="mx-auto max-w-6xl px-4 pt-24 sm:px-6 lg:px-8">
+                    {% for message in messages %}
+                        {% if not page_name == "contact" or not contact_success_prompt or "success" not in message.tags %}
+                            {% if not page_name == "home" or not home_contact_success_prompt or "success" not in message.tags %}
+                            <div class="mb-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm {{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </main>
+        {% include "includes/footer.html" %}
+    </div>
+    <button id="scrollToTop" class="scroll-top-btn" aria-label="Scroll to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

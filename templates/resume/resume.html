@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="px-4 pb-20 pt-32 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        {% include "includes/breadcrumb.html" %}
+        <div class="section-heading">
+            <span class="section-kicker">Resume</span>
+            <h1 class="section-title">Download or preview my latest resume and profile summary.</h1>
+        </div>
+        <div class="mt-12 grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+            <div class="content-panel">
+                <h2 class="font-display text-2xl font-semibold text-white">Download Options</h2>
+                {% if contact_info and contact_info.resume_pdf %}
+                    <div class="mt-6 flex flex-col gap-4">
+                        <a href="#resume-preview" class="rounded-full bg-white px-6 py-4 text-center text-sm font-semibold text-slate-950">Preview Resume</a>
+                        <a href="{{ contact_info.resume_pdf.url }}" target="_blank" class="rounded-full border border-white/10 px-6 py-4 text-center text-sm font-semibold text-white">Open in New Tab</a>
+                        <a href="{{ contact_info.resume_pdf.url }}" download class="rounded-full border border-teal/30 bg-teal/10 px-6 py-4 text-center text-sm font-semibold text-teal-50">Download PDF Resume</a>
+                    </div>
+                {% else %}
+                    <p class="mt-4 text-slate-400">No resume file uploaded yet.</p>
+                {% endif %}
+            </div>
+            <div id="resume-preview" class="content-panel scroll-mt-28">
+                <h2 class="font-display text-2xl font-semibold text-white">Embedded Preview</h2>
+                {% if contact_info and contact_info.resume_pdf %}
+                    <div class="mt-6 overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-900/70">
+                        <iframe
+                            src="{{ contact_info.resume_pdf.url }}#toolbar=0&navpanes=0&scrollbar=1"
+                            title="Resume preview"
+                            class="h-[800px] w-full"
+                        ></iframe>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="contact-page px-4 pb-20 pt-32 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        {% include "includes/breadcrumb.html" %}
+
+        <div class="contact-hero-simple" data-aos="fade-up">
+            <span class="contact-page-kicker">Contact</span>
+            <h1 class="contact-page-title contact-page-title-simple">
+                Let's build something
+                <span>clear, useful, and well crafted.</span>
+            </h1>
+            <p class="contact-page-intro contact-page-intro-simple">
+                If you have a role, project, or collaboration in mind, send the details below.
+                I’m happy to discuss product ideas, engineering work, and thoughtful digital experiences.
+            </p>
+        </div>
+
+        <div class="contact-main-grid contact-main-grid-simple">
+            <div class="contact-form-shell" data-aos="fade-up">
+                <div class="contact-section-head">
+                    <p class="contact-small-label">Send a message</p>
+                    <h2 class="contact-section-title">Share the context and I’ll take it from there.</h2>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" class="contact-form-grid" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="contact">
+
+                    <div class="contact-field-grid">
+                        <div>
+                            <label for="{{ contact_form.name.id_for_label }}" class="form-label">Full Name</label>
+                            {{ contact_form.name }}
+                            {% if contact_form.name.errors %}<p class="form-error">{{ contact_form.name.errors|join:", " }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ contact_form.email.id_for_label }}" class="form-label">Email Address</label>
+                            {{ contact_form.email }}
+                            {% if contact_form.email.errors %}<p class="form-error">{{ contact_form.email.errors|join:", " }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="contact-field-grid">
+                        <div>
+                            <label for="{{ contact_form.phone.id_for_label }}" class="form-label">Phone</label>
+                            {{ contact_form.phone }}
+                            {% if contact_form.phone.errors %}<p class="form-error">{{ contact_form.phone.errors|join:", " }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ contact_form.company.id_for_label }}" class="form-label">Company / Organization</label>
+                            {{ contact_form.company }}
+                            {% if contact_form.company.errors %}<p class="form-error">{{ contact_form.company.errors|join:", " }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div class="contact-field-grid">
+                        <div>
+                            <label for="{{ contact_form.message_type.id_for_label }}" class="form-label">Message Type</label>
+                            {{ contact_form.message_type }}
+                            {% if contact_form.message_type.errors %}<p class="form-error">{{ contact_form.message_type.errors|join:", " }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ contact_form.subject.id_for_label }}" class="form-label">Subject</label>
+                            {{ contact_form.subject }}
+                            {% if contact_form.subject.errors %}<p class="form-error">{{ contact_form.subject.errors|join:", " }}</p>{% endif %}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="{{ contact_form.message.id_for_label }}" class="form-label">Message</label>
+                        {{ contact_form.message }}
+                        <div class="mt-3 flex items-center justify-between gap-3">
+                            {% if contact_form.message.errors %}<p class="form-error">{{ contact_form.message.errors|join:", " }}</p>{% endif %}
+                            <p class="contact-char-note"><span id="messageCount">0</span> characters</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-attach-toggle">
+                        <label class="contact-checkbox-label" for="attachToggle">
+                            <input
+                                type="checkbox"
+                                id="attachToggle"
+                                class="contact-checkbox-input"
+                                {% if contact_form.attachment.errors %}checked{% endif %}
+                            >
+                            <span>I want to attach something</span>
+                        </label>
+                    </div>
+
+                    <div id="attachmentWrap" {% if not contact_form.attachment.errors %}hidden{% endif %}>
+                        <label for="{{ contact_form.attachment.id_for_label }}" class="form-label">Attachment</label>
+                        {{ contact_form.attachment }}
+                        {% if contact_form.attachment.errors %}<p class="form-error">{{ contact_form.attachment.errors|join:", " }}</p>{% endif %}
+                    </div>
+
+                    <div class="contact-actions">
+                        <button type="submit" class="contact-submit-button">
+                            Send Message
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="contact-info-grid" data-aos="fade-up" data-aos-delay="100">
+            <div class="contact-sidebar">
+                <div class="contact-sidebar-card">
+                    <p class="contact-small-label">Direct Reach</p>
+                    <div class="contact-sidebar-list">
+                        {% if contact_info %}
+                            <div>
+                                <p class="contact-meta-heading">Email</p>
+                                <a href="mailto:{{ contact_info.email }}" class="contact-meta-link">{{ contact_info.email }}</a>
+                            </div>
+                            {% if contact_info.phone %}
+                                <div>
+                                    <p class="contact-meta-heading">Phone</p>
+                                    <a href="tel:{{ contact_info.phone }}" class="contact-meta-link">{{ contact_info.phone }}</a>
+                                </div>
+                            {% endif %}
+                            {% if contact_info.location %}
+                                <div>
+                                    <p class="contact-meta-heading">Location</p>
+                                    <p class="contact-meta-text">{{ contact_info.location }}</p>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if site_config.availability_status %}
+                            <div>
+                                <p class="contact-meta-heading">Availability</p>
+                                <p class="contact-meta-text">{{ site_config.availability_status }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if global_social_links %}
+                    <div class="contact-sidebar-card">
+                        <p class="contact-small-label">Social Profiles</p>
+                        <div class="contact-social-list">
+                            {% for social in global_social_links %}
+                                <a href="{{ social.profile_url }}" class="contact-social-link">
+                                    <span>{{ social.platform }}</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="contact-sidebar-card contact-location-card">
+                {% if contact_info and contact_info.location %}
+                    <iframe
+                        class="contact-location-frame"
+                        src="https://maps.google.com/maps?q={{ contact_info.location|urlencode }}&t=k&z=13&output=embed"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        allowfullscreen
+                        title="Satellite map of {{ contact_info.location }}"
+                    ></iframe>
+                {% else %}
+                    <div class="contact-location-bg"></div>
+                {% endif %}
+                <div class="contact-location-overlay"></div>
+                <div class="contact-location-copy">
+                    <p class="contact-small-label">Map</p>
+                    <h3>{{ contact_info.location|default:"Bengaluru, India" }}</h3>
+                    <p>Available for remote work, collaborations, and thoughtful engineering conversations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if contact_success_prompt %}
+    <div class="contact-success-overlay" id="contactSuccessPrompt">
+        <div class="contact-success-dialog">
+            <p class="contact-small-label">Message Sent</p>
+            <h2 class="contact-success-title">Your message was sent successfully.</h2>
+            <p class="contact-success-copy">
+                Thanks for reaching out. You can go back to the home page or stay here if you want to review the contact details again.
+            </p>
+            <div class="contact-success-actions">
+                <a href="{% url 'portfolio_app:home' %}" class="contact-success-home">Go to Home Page</a>
+                <button type="button" class="contact-success-stay" id="contactSuccessStay">Stay Here</button>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+    const contactSuccessStay = document.getElementById("contactSuccessStay");
+    const contactSuccessPrompt = document.getElementById("contactSuccessPrompt");
+
+    contactSuccessStay?.addEventListener("click", () => {
+        contactSuccessPrompt?.remove();
+    });
+</script>
+{% endblock %}

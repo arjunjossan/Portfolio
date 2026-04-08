@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="relative overflow-hidden px-4 pb-20 pt-32 sm:px-6 lg:px-8 lg:pb-28 lg:pt-40">
+    <div class="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top_left,_rgba(29,157,139,0.24),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(56,189,248,0.18),_transparent_24%),linear-gradient(180deg,_#020617_0%,_#0f172a_50%,_#020617_100%)]"></div>
+    <div class="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+        <div class="lg:-translate-y-8" data-aos="fade-right">
+            {% if global_social_links %}
+                <div class="mb-4 flex flex-wrap items-center gap-3">
+                    {% for social in global_social_links %}
+                        <a
+                            href="{{ social.profile_url }}"
+                            aria-label="{{ social.platform }}"
+                            class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white shadow-soft backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-teal/50 hover:bg-teal/10 hover:text-teal-100"
+                            style="animation: heroSocialFloat 3.2s ease-in-out infinite; animation-delay: {{ forloop.counter0 }}00ms;"
+                        >
+                            <i class="{{ social.icon_code }}"></i>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <span class="section-kicker">{{ site_config.accent_text|default:"Developer portfolio" }}</span>
+            <h1 class="mt-6 font-display text-5xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl">{{ hero.title|default:"Hi, I'm Arjun Singh" }}</h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">{{ hero.subtitle|default:site_config.seo_description }}</p>
+            <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+                <a href="{% url 'portfolio_app:projects' %}" class="inline-flex items-center justify-center gap-2 rounded-full bg-teal px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-teal/90">Explore Projects <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'portfolio_app:about' %}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:border-white/40">Learn About Me</a>
+                <a href="{% url 'portfolio_app:contact' %}" class="inline-flex items-center justify-center gap-2 rounded-full border border-teal/30 bg-teal/10 px-7 py-4 text-sm font-semibold text-teal-50 transition duration-300 hover:-translate-y-1 hover:border-teal/60">Get In Touch</a>
+            </div>
+        </div>
+        <div class="hero-card" data-aos="fade-left">
+            <div class="hero-cover hero-cover--{{ hero.cover_style|default:'classic' }}">
+                {% if hero and hero.headline_image %}
+                    <img src="{{ hero.headline_image.url }}" alt="{{ hero.title }}" class="hero-cover-image">
+                {% else %}
+                    <div class="hero-placeholder">
+                        <div class="hero-graphic-wrap">
+                            <img src="{% static 'images/hero-orbit.svg' %}" alt="Abstract technology graphic" class="hero-graphic">
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="hero-cover-overlay"></div>
+                <div
+                    class="hero-cover-content"
+                    style="--hero-heading-offset-x: {{ hero.cover_heading_offset_x|default:0 }}px; --hero-heading-offset-y: {{ hero.cover_heading_offset_y|default:0 }}px; --hero-cover-text-opacity: {{ hero.cover_text_opacity|default:100 }}%;"
+                >
+                    <div class="hero-cover-top">
+                        {% if hero and hero.cover_label %}
+                            <p class="hero-cover-label hero-font--{{ hero.cover_label_font|default:'modern' }}">{{ hero.cover_label }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="hero-cover-bottom">
+                        {% if hero and hero.cover_heading %}
+                            <h2 class="hero-cover-heading hero-font--{{ hero.cover_heading_font|default:'editorial' }}">{{ hero.cover_heading }}</h2>
+                        {% endif %}
+                        {% if hero and hero.cover_caption %}
+                            <p class="hero-cover-caption hero-font--{{ hero.cover_caption_font|default:'clean' }}">{{ hero.cover_caption }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="px-4 py-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div class="section-heading max-w-3xl">
+                <span class="section-kicker">Featured Projects</span>
+                <h2 class="section-title section-title-home">Selected work that reflects hands-on engineering, structured thinking, and practical problem solving.</h2>
+            </div>
+            <a href="{% url 'portfolio_app:projects' %}" class="inline-flex items-center justify-center gap-2 self-start rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:border-white/35 hover:bg-white/10">View More <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {% for project in featured_projects %}
+                {% include "projects/project_card.html" with project=project %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="px-4 py-14 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-soft backdrop-blur">
+        <div class="grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+            <div class="p-6 sm:p-8">
+                <div class="section-heading max-w-3xl">
+                    <span class="section-kicker">Skills Overview</span>
+                    <h2 class="section-title section-title-home">A focused toolkit across backend, frontend, cloud, and data workflows.</h2>
+                </div>
+                <div class="mt-6 space-y-4">
+                    {% for category, skills in skill_groups.items %}
+                        <div class="skill-row">
+                            <div class="skill-row-head">
+                                <p class="skill-row-title">{{ category }}</p>
+                                <span class="skill-row-count">{{ skills|length }} skills</span>
+                            </div>
+                            <div class="skill-row-items">
+                                {% for skill in skills|slice:":5" %}
+                                    <span class="skill-chip-plain">
+                                        {% if skill.icon %}
+                                            <i class="{{ skill.icon }}"></i>
+                                        {% else %}
+                                            <i class="fa-solid fa-code"></i>
+                                        {% endif %}
+                                        {{ skill.skill_name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="skills-visual">
+                <div class="skills-visual-panel">
+                    <div class="skills-orbit skills-orbit-one"></div>
+                    <div class="skills-orbit skills-orbit-two"></div>
+                    <div class="skills-center-badge">Skills</div>
+                    <div class="skills-float skills-float-python"><i class="fa-brands fa-python"></i><span>Python</span></div>
+                    <div class="skills-float skills-float-django"><i class="fa-solid fa-server"></i><span>Django</span></div>
+                    <div class="skills-float skills-float-react"><i class="fa-brands fa-react"></i><span>React</span></div>
+                    <div class="skills-float skills-float-docker"><i class="fa-brands fa-docker"></i><span>Docker</span></div>
+                    <div class="skills-float skills-float-db"><i class="fa-solid fa-database"></i><span>PostgreSQL</span></div>
+                    <div class="skills-float skills-float-cloud"><i class="fa-brands fa-google"></i><span>Cloud</span></div>
+                    <div class="skills-shape skills-shape-one"></div>
+                    <div class="skills-shape skills-shape-two"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="subscribe-updates" class="px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-soft backdrop-blur">
+        <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="subscribe-copy p-10">
+                <span class="section-kicker">Subscribe</span>
+                <h2 class="mt-4 font-display text-3xl font-bold text-white sm:text-4xl">Get notified when I publish a new project or major portfolio update.</h2>
+                <p class="mt-4 max-w-2xl text-base leading-8 text-slate-300">Join the update list to hear about new builds, shipped features, and fresh work added to the portfolio.</p>
+                <div class="mt-6 flex flex-wrap gap-3 text-sm text-slate-300">
+                    <span class="rounded-full border border-white/10 bg-white/5 px-4 py-2">Project launches</span>
+                    <span class="rounded-full border border-white/10 bg-white/5 px-4 py-2">Portfolio updates</span>
+                    <span class="rounded-full border border-white/10 bg-white/5 px-4 py-2">New case studies</span>
+                </div>
+            </div>
+            <div class="subscribe-panel p-10">
+                <form method="post" class="space-y-5" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="subscribe">
+                    <label for="{{ subscribe_form.email.id_for_label }}" class="form-label">Email Address</label>
+                    {{ subscribe_form.email }}
+                    {% if subscribe_form.email.errors %}
+                        <p class="form-error">{{ subscribe_form.email.errors|join:", " }}</p>
+                    {% endif %}
+                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-sm font-semibold text-slate-950 transition duration-300 hover:-translate-y-1 hover:bg-slate-100">
+                        Subscribe for Updates
+                        <i class="fa-solid fa-bell"></i>
+                    </button>
+                    <p class="text-sm leading-7 text-slate-400">No spam. Only meaningful updates when new portfolio work is published.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="px-4 pb-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-soft backdrop-blur">
+        <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+            <div class="p-10">
+                <span class="section-kicker">Explore Further</span>
+                <h2 class="mt-4 font-display text-3xl font-bold text-white sm:text-4xl">Follow the full story across projects, education, and experience.</h2>
+                <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+                    <a href="{% url 'portfolio_app:about' %}" class="rounded-full bg-white px-6 py-4 text-center text-sm font-semibold text-slate-950">About Me</a>
+                    <a href="{% url 'portfolio_app:education' %}" class="rounded-full border border-white/10 px-6 py-4 text-center text-sm font-semibold text-white">Education</a>
+                    <a href="{% url 'portfolio_app:contact' %}" class="rounded-full border border-white/10 px-6 py-4 text-center text-sm font-semibold text-white">Contact</a>
+                </div>
+            </div>
+            <div class="explore-graphic-panel">
+                <img src="{% static 'images/section-mesh.svg' %}" alt="Abstract project and systems graphic" class="section-graphic">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="home-contact" class="px-4 pb-10 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        <div class="section-heading max-w-3xl">
+            <span class="section-kicker">Contact</span>
+            {% comment %} <h2 class="section-title section-title-home">Start a conversation .</h2> {% endcomment %}
+        </div>
+        <div class="mt-4 compact-home-contact grid gap-3 lg:grid-cols-[0.76fr_1.24fr]">
+            {% include "includes/contact.html" %}
+        </div>
+    </div>
+</section>
+
+{% if subscription_prompt == "subscribed" or subscription_prompt == "reactivated" or subscription_prompt == "already_subscribed" %}
+    <div class="contact-success-overlay" id="subscriptionPrompt">
+        <div class="contact-success-dialog">
+            {% if subscription_prompt == "already_subscribed" %}
+                <p class="contact-small-label text-amber-300">Already Subscribed</p>
+                <h2 class="contact-success-title">This email is already subscribed.</h2>
+                <p class="contact-success-copy">
+                    You're already on the update list, so there is nothing else you need to do. I’ll use this email for future project and portfolio updates.
+                </p>
+                <div class="mt-4 rounded-2xl border border-amber-400/20 bg-amber-400/10 px-4 py-3 text-sm leading-7 text-amber-100">
+                    This is just a heads-up, not an error. You are already registered for updates with this email.
+                </div>
+            {% elif subscription_prompt == "reactivated" %}
+                <p class="contact-small-label">Subscription Update</p>
+                <h2 class="contact-success-title">Your subscription is active again.</h2>
+                <p class="contact-success-copy">
+                    This email was already in the system and has now been reactivated for future project and portfolio updates.
+                </p>
+            {% else %}
+                <p class="contact-small-label">Subscription Update</p>
+                <h2 class="contact-success-title">You’re subscribed for future updates.</h2>
+                <p class="contact-success-copy">
+                    Thanks for subscribing. I’ll use this email to share major portfolio updates, new case studies, and fresh project launches.
+                </p>
+            {% endif %}
+            <div class="contact-success-actions">
+                <button type="button" class="contact-success-home" id="subscriptionPromptOkay">Okay</button>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if home_contact_success_prompt %}
+    <div class="contact-success-overlay" id="homeContactPrompt">
+        <div class="contact-success-dialog">
+            <p class="contact-small-label">Message Sent</p>
+            <h2 class="contact-success-title">Your message was sent successfully.</h2>
+            <p class="contact-success-copy">
+                Thanks for reaching out. Your message has been submitted and I’ll review it soon.
+            </p>
+            <div class="contact-success-actions">
+                <button type="button" class="contact-success-home" id="homeContactPromptOkay">Okay</button>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+{% if subscription_prompt == "subscribed" or subscription_prompt == "reactivated" or subscription_prompt == "already_subscribed" %}
+<script>
+    const subscriptionPromptOkay = document.getElementById("subscriptionPromptOkay");
+
+    subscriptionPromptOkay?.addEventListener("click", () => {
+        window.location.replace("{% url 'portfolio_app:home' %}#{{ subscription_anchor|default:'subscribe-updates' }}");
+    });
+</script>
+{% endif %}
+{% if home_contact_success_prompt %}
+<script>
+    const homeContactPromptOkay = document.getElementById("homeContactPromptOkay");
+
+    homeContactPromptOkay?.addEventListener("click", () => {
+        window.location.replace("{% url 'portfolio_app:home' %}#home-contact");
+    });
+</script>
+{% endif %}
+<style>
+    @keyframes heroSocialFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="px-4 pb-20 pt-32 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl">
+        {% include "includes/breadcrumb.html" %}
+
+        <article class="project-case-study">
+            <header class="project-case-study-header">
+                <div class="flex flex-wrap items-center gap-3">
+                    <span class="rounded-full border border-teal/30 bg-teal/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-teal-100">{{ project.category }}</span>
+                    <span class="rounded-full border border-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-300">{{ project.status }}</span>
+                </div>
+
+                <h1 class="mt-6 font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl">{{ project.title }}</h1>
+                <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">{{ project.description }}</p>
+
+                <div class="project-case-study-actions">
+                    {% if project.project_url %}
+                        <a href="{{ project.project_url }}" target="_blank" rel="noopener noreferrer" class="project-case-study-link project-case-study-link--primary">
+                            <i class="fa-regular fa-eye"></i>
+                            Live Demo
+                        </a>
+                    {% endif %}
+                    {% if project.github_url %}
+                        <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer" class="project-case-study-link">
+                            <i class="fa-brands fa-github"></i>
+                            Source Code
+                        </a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <section class="project-case-study-strip">
+                <div class="project-case-study-stat">
+                    <span class="project-case-study-stat-label">Started</span>
+                    <span class="project-case-study-stat-value">{{ project.start_date|date:"M Y" }}</span>
+                </div>
+                <div class="project-case-study-stat">
+                    <span class="project-case-study-stat-label">Completed</span>
+                    <span class="project-case-study-stat-value">{{ project.end_date|date:"M Y"|default:"Ongoing" }}</span>
+                </div>
+                <div class="project-case-study-stat">
+                    <span class="project-case-study-stat-label">Category</span>
+                    <span class="project-case-study-stat-value">{{ project.category }}</span>
+                </div>
+                <div class="project-case-study-stat">
+                    <span class="project-case-study-stat-label">Status</span>
+                    <span class="project-case-study-stat-value">{{ project.status }}</span>
+                </div>
+            </section>
+
+            {% if project_gallery_images %}
+                <section class="project-case-study-gallery" data-project-gallery>
+                    <div class="project-case-study-gallery-main">
+                        {% with active_image=project_gallery_images.0 %}
+                            <img
+                                src="{{ active_image.image.url }}"
+                                alt="{{ active_image.alt_text }}"
+                                class="project-case-study-image"
+                                data-gallery-active-image
+                            >
+                            <div class="project-case-study-gallery-badge" data-gallery-image-label>
+                                {% if active_image.is_primary %}Main Image{% else %}Project View{% endif %}
+                            </div>
+                        {% endwith %}
+                    </div>
+                    {% if project_gallery_images|length > 1 %}
+                        <div class="project-case-study-gallery-stack" aria-label="Project image gallery">
+                            {% for gallery_image in project_gallery_images %}
+                                <button
+                                    type="button"
+                                    class="project-gallery-thumb{% if forloop.first %} is-active{% endif %}"
+                                    data-gallery-thumb
+                                    data-image-url="{{ gallery_image.image.url }}"
+                                    data-image-alt="{{ gallery_image.alt_text }}"
+                                    data-image-label="{% if gallery_image.is_primary %}Main Image{% else %}Project View {{ forloop.counter }}{% endif %}"
+                                    aria-label="Show image {{ forloop.counter }}"
+                                    aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                                >
+                                    <img src="{{ gallery_image.image.url }}" alt="{{ gallery_image.alt_text }}" class="project-gallery-thumb-image">
+                                </button>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </section>
+            {% endif %}
+
+            <div class="project-case-study-layout">
+                <div class="project-case-study-main">
+                    <section class="project-case-study-section">
+                        <div class="project-case-study-heading">
+                            <span class="project-case-study-icon"><i class="fa-regular fa-file-lines"></i></span>
+                            <h2 class="font-display text-2xl font-semibold text-white">Overview</h2>
+                        </div>
+                        <div class="mt-5 text-base leading-8 text-slate-300">{{ project.detailed_description|linebreaksbr }}</div>
+                    </section>
+
+                    {% if project.key_features %}
+                        <section class="project-case-study-section">
+                            <div class="project-case-study-heading">
+                                <span class="project-case-study-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                                <h2 class="font-display text-2xl font-semibold text-white">Key Features</h2>
+                            </div>
+                            <div class="mt-5 grid gap-3 md:grid-cols-2">
+                                {% for feature in project.key_features %}
+                                    <div class="project-case-study-feature">
+                                        <i class="fa-solid fa-check"></i>
+                                        <span>{{ feature }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                    {% endif %}
+
+                    {% if project.lessons_learned %}
+                        <section class="project-case-study-section">
+                            <div class="project-case-study-heading">
+                                <span class="project-case-study-icon"><i class="fa-solid fa-lightbulb"></i></span>
+                                <h2 class="font-display text-2xl font-semibold text-white">Lessons Learned</h2>
+                            </div>
+                            <div class="mt-5 text-base leading-8 text-slate-300">{{ project.lessons_learned|linebreaksbr }}</div>
+                        </section>
+                    {% endif %}
+                </div>
+
+                <aside class="project-case-study-side">
+                    <section class="project-case-study-card">
+                        <div class="project-case-study-heading">
+                            <span class="project-case-study-icon"><i class="fa-solid fa-code"></i></span>
+                            <h2 class="font-display text-xl font-semibold text-white">Tech Stack</h2>
+                        </div>
+                        <div class="mt-5 flex flex-wrap gap-2">
+                            {% for technology in project.technologies_used %}
+                                <span class="rounded-full border border-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200">{{ technology }}</span>
+                            {% endfor %}
+                        </div>
+                    </section>
+
+                    {% if previous_project or next_project %}
+                        <section class="project-case-study-card">
+                            <div class="project-case-study-heading">
+                                <span class="project-case-study-icon"><i class="fa-solid fa-compass"></i></span>
+                                <h2 class="font-display text-xl font-semibold text-white">Navigate</h2>
+                            </div>
+                            <div class="mt-5 space-y-3">
+                                {% if previous_project %}
+                                    <a href="{{ previous_project.get_absolute_url }}" class="project-case-study-nav">
+                                        <span>Previous Project</span>
+                                        <strong>{{ previous_project.title }}</strong>
+                                    </a>
+                                {% endif %}
+                                {% if next_project %}
+                                    <a href="{{ next_project.get_absolute_url }}" class="project-case-study-nav">
+                                        <span>Next Project</span>
+                                        <strong>{{ next_project.title }}</strong>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </section>
+                    {% endif %}
+                </aside>
+            </div>
+
+            {% if related_projects %}
+                <section class="project-case-study-related">
+                    <div class="project-case-study-heading">
+                        <span class="project-case-study-icon"><i class="fa-solid fa-diagram-project"></i></span>
+                        <h2 class="font-display text-2xl font-semibold text-white">Related Projects</h2>
+                    </div>
+                    <div class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                        {% for project in related_projects %}
+                            {% include "projects/project_card.html" with project=project %}
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+        </article>
+    </div>
+</section>
+{% endblock %}

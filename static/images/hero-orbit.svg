@@ -1,0 +1,37 @@
+<svg width="520" height="520" viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="520" height="520" rx="48" fill="url(#bg)"/>
+  <circle cx="260" cy="260" r="150" stroke="url(#ring1)" stroke-width="2" opacity="0.5"/>
+  <circle cx="260" cy="260" r="102" stroke="url(#ring2)" stroke-width="2" stroke-dasharray="8 12" opacity="0.8"/>
+  <circle cx="260" cy="260" r="56" fill="url(#core)"/>
+  <circle cx="362" cy="182" r="12" fill="#67E8F9"/>
+  <circle cx="168" cy="320" r="10" fill="#1D9D8B"/>
+  <circle cx="344" cy="334" r="8" fill="#F97316"/>
+  <path d="M168 320L260 260L362 182" stroke="url(#line1)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M260 260L344 334" stroke="url(#line2)" stroke-width="3" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="bg" x1="65" y1="38" x2="454" y2="487" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10243B"/>
+      <stop offset="1" stop-color="#08111F"/>
+    </linearGradient>
+    <linearGradient id="ring1" x1="110" y1="110" x2="410" y2="410" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D9D8B"/>
+      <stop offset="1" stop-color="#67E8F9"/>
+    </linearGradient>
+    <linearGradient id="ring2" x1="158" y1="158" x2="362" y2="362" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(260 260) rotate(90) scale(56)">
+      <stop stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#1D9D8B"/>
+    </radialGradient>
+    <linearGradient id="line1" x1="168" y1="320" x2="362" y2="182" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D9D8B"/>
+      <stop offset="1" stop-color="#67E8F9"/>
+    </linearGradient>
+    <linearGradient id="line2" x1="260" y1="260" x2="344" y2="334" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+</svg>

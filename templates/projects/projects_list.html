@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="px-4 pb-20 pt-32 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        {% include "includes/breadcrumb.html" %}
+        <div class="section-heading">
+            <span class="section-kicker">Projects</span>
+            <h1 class="section-title">A filterable gallery of full-stack, backend, frontend, and data work.</h1>
+        </div>
+        <form method="get" class="filter-form mt-10 grid gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-6 lg:grid-cols-5">
+            <input type="text" name="q" value="{{ filters.q }}" placeholder="Search projects">
+            <select name="technology"><option value="">All Technologies</option>{% for item in technology_options %}<option value="{{ item }}" {% if filters.technology == item %}selected{% endif %}>{{ item }}</option>{% endfor %}</select>
+            <select name="status"><option value="">All Statuses</option>{% for item in status_options %}<option value="{{ item }}" {% if filters.status == item %}selected{% endif %}>{{ item }}</option>{% endfor %}</select>
+            <select name="category"><option value="">All Categories</option>{% for item in category_options %}<option value="{{ item }}" {% if filters.category == item %}selected{% endif %}>{{ item }}</option>{% endfor %}</select>
+            <select name="sort">
+                <option value="custom" {% if filters.sort == 'custom' %}selected{% endif %}>Manual Order</option>
+                <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest</option>
+                <option value="oldest" {% if filters.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                <option value="featured" {% if filters.sort == 'featured' %}selected{% endif %}>Featured first</option>
+            </select>
+            <div class="lg:col-span-5 flex gap-3">
+                <button type="submit" class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950">Apply Filters</button>
+                <a href="{% url 'portfolio_app:projects' %}" class="rounded-full border border-white/10 px-6 py-3 text-sm font-semibold text-white">Clear</a>
+            </div>
+        </form>
+        <div class="mt-12 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            {% for project in projects %}
+                {% include "projects/project_card.html" with project=project %}
+            {% empty %}
+                <div class="content-panel text-slate-300 lg:col-span-2 xl:col-span-3">No projects matched your filters. Try clearing the search or broadening the criteria.</div>
+            {% endfor %}
+        </div>
+        {% include "includes/pagination.html" %}
+    </div>
+</section>
+{% endblock %}

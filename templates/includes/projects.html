@@ -1,0 +1,73 @@
+<section id="projects" class="px-4 py-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div class="section-heading" data-aos="fade-up">
+                <span class="section-kicker">Featured Work</span>
+                <h2 class="section-title">Projects that show technical depth, initiative, and readiness for advanced study.</h2>
+            </div>
+            {% if project_filters %}
+                <div class="flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="100">
+                    <button type="button" class="filter-btn is-active" data-filter="all">All</button>
+                    {% for status in project_filters %}
+                        <button type="button" class="filter-btn" data-filter="{{ status|slugify }}">{{ status }}</button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mt-12 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+            {% for project in all_projects %}
+                <article class="project-card" data-project-card data-filter-value="{{ project.status|slugify }}" data-aos="fade-up">
+                    <div class="project-media">
+                        {% if project.project_image %}
+                            <img src="{{ project.project_image.url }}" alt="{{ project.title }}" class="h-60 w-full object-cover">
+                        {% else %}
+                            <div class="project-fallback">
+                                <span class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-200">{{ project.status }}</span>
+                                <p class="mt-5 max-w-xs text-sm leading-7 text-slate-300">{{ project.description|truncatechars:110 }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="rounded-full border border-teal/30 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-teal-100">{{ project.status }}</span>
+                            {% if project.is_featured %}
+                                <span class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">Featured</span>
+                            {% endif %}
+                        </div>
+                        <h3 class="mt-4 font-display text-2xl font-semibold text-white">{{ project.title }}</h3>
+                        <p class="mt-3 text-sm leading-7 text-slate-300">{{ project.description|truncatechars:160 }}</p>
+                        {% if project.technologies_used %}
+                            <div class="mt-5 flex flex-wrap gap-2">
+                                {% for technology in project.technologies_used %}
+                                    <span class="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-slate-200">{{ technology }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="mt-6 flex items-center justify-between gap-4">
+                            <a href="{{ project.get_absolute_url }}" class="inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:text-teal-100">
+                                View Details
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                            <div class="flex items-center gap-3">
+                                {% if project.project_url %}
+                                    <a href="{{ project.project_url }}" class="icon-btn" aria-label="Open live project">
+                                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    </a>
+                                {% endif %}
+                                {% if project.github_url %}
+                                    <a href="{{ project.github_url }}" class="icon-btn" aria-label="Open GitHub repository">
+                                        <i class="fa-brands fa-github"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="rounded-[2rem] border border-dashed border-white/15 bg-white/5 p-8 text-slate-300 lg:col-span-2 xl:col-span-3">
+                    Add projects in the admin panel to build your portfolio gallery.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

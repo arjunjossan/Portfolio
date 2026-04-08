@@ -1,0 +1,55 @@
+<header x-data="{ open: false }" class="fixed inset-x-0 top-0 z-50">
+    <div class="mx-auto mt-4 max-w-6xl px-4 sm:px-6 lg:px-8">
+        <nav class="rounded-full border border-white/10 bg-slate-950/70 px-4 py-3 shadow-soft backdrop-blur-xl">
+            <div class="flex items-center justify-between gap-4">
+                <a href="{% url 'portfolio_app:home' %}" class="flex items-center gap-3">
+                    <span class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-teal to-cyan-300 font-display text-lg font-bold text-slate-950">{{ site_config.logo_text|default:"AS"|slice:":2" }}</span>
+                    <span class="hidden font-display text-base font-semibold tracking-[0.2em] text-white sm:block">{{ site_config.site_name|default:"Portfolio" }}</span>
+                </a>
+                <div class="hidden items-center gap-6 lg:flex">
+                    <a href="{% url 'portfolio_app:home' %}" class="nav-link {% if page_name == 'home' %}is-active{% endif %}">Home</a>
+                    <a href="{% url 'portfolio_app:about' %}" class="nav-link {% if page_name == 'about' %}is-active{% endif %}">About</a>
+                    <a href="{% url 'portfolio_app:skills' %}" class="nav-link {% if page_name == 'skills' %}is-active{% endif %}">Skills</a>
+                    <a href="{% url 'portfolio_app:projects' %}" class="nav-link {% if page_name == 'projects' or page_name == 'project_detail' %}is-active{% endif %}">Projects</a>
+                    <a href="{% url 'portfolio_app:experience' %}" class="nav-link {% if page_name == 'experience' %}is-active{% endif %}">Experience</a>
+                    <a href="{% url 'portfolio_app:education' %}" class="nav-link {% if page_name == 'education' %}is-active{% endif %}">Education</a>
+                    <a href="{% url 'portfolio_app:contact' %}" class="nav-link {% if page_name == 'contact' %}is-active{% endif %}">Contact</a>
+                    {% if site_config.show_theme_toggle %}
+                        <button id="themeToggle" type="button" class="icon-btn" aria-label="Toggle color theme">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                        </button>
+                    {% endif %}
+                    {% if global_contact and global_contact.resume_pdf and global_contact.cv_download_enabled %}
+                        <a href="{% url 'portfolio_app:resume' %}#resume-preview" class="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-slate-100">
+                            {{ site_config.resume_label|default:"Download CV" }}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="flex items-center gap-3 lg:hidden">
+                    {% if site_config.show_theme_toggle %}
+                        <button id="themeToggleMobile" type="button" class="icon-btn" aria-label="Toggle color theme">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                        </button>
+                    {% endif %}
+                    <button type="button" class="icon-btn" @click="open = !open" :aria-expanded="open.toString()" aria-label="Open navigation menu">
+                        <i class="fa-solid" :class="open ? 'fa-xmark' : 'fa-bars'"></i>
+                    </button>
+                </div>
+            </div>
+            <div x-show="open" x-transition class="mt-4 space-y-3 rounded-3xl border border-white/10 bg-slate-900/95 p-5 lg:hidden">
+                <a href="{% url 'portfolio_app:home' %}" class="mobile-nav-link" @click="open = false">Home</a>
+                <a href="{% url 'portfolio_app:about' %}" class="mobile-nav-link" @click="open = false">About</a>
+                <a href="{% url 'portfolio_app:skills' %}" class="mobile-nav-link" @click="open = false">Skills</a>
+                <a href="{% url 'portfolio_app:projects' %}" class="mobile-nav-link" @click="open = false">Projects</a>
+                <a href="{% url 'portfolio_app:experience' %}" class="mobile-nav-link" @click="open = false">Experience</a>
+                <a href="{% url 'portfolio_app:education' %}" class="mobile-nav-link" @click="open = false">Education</a>
+                <a href="{% url 'portfolio_app:contact' %}" class="mobile-nav-link" @click="open = false">Contact</a>
+                {% if global_contact and global_contact.resume_pdf and global_contact.cv_download_enabled %}
+                    <a href="{% url 'portfolio_app:resume' %}#resume-preview" class="block rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950">
+                        {{ site_config.resume_label|default:"Download CV" }}
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>

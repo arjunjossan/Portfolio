@@ -1,0 +1,33 @@
+<svg width="820" height="420" viewBox="0 0 820 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="820" height="420" rx="40" fill="url(#bg)"/>
+  <g opacity="0.5">
+    <path d="M120 92H699" stroke="#67E8F9" stroke-opacity="0.22"/>
+    <path d="M120 154H699" stroke="#67E8F9" stroke-opacity="0.15"/>
+    <path d="M120 216H699" stroke="#67E8F9" stroke-opacity="0.22"/>
+    <path d="M120 278H699" stroke="#67E8F9" stroke-opacity="0.15"/>
+    <path d="M120 340H699" stroke="#67E8F9" stroke-opacity="0.22"/>
+    <path d="M176 60V360" stroke="#1D9D8B" stroke-opacity="0.18"/>
+    <path d="M292 60V360" stroke="#1D9D8B" stroke-opacity="0.26"/>
+    <path d="M408 60V360" stroke="#1D9D8B" stroke-opacity="0.18"/>
+    <path d="M524 60V360" stroke="#1D9D8B" stroke-opacity="0.26"/>
+    <path d="M640 60V360" stroke="#1D9D8B" stroke-opacity="0.18"/>
+  </g>
+  <circle cx="233" cy="185" r="10" fill="#1D9D8B"/>
+  <circle cx="409" cy="122" r="10" fill="#67E8F9"/>
+  <circle cx="582" cy="248" r="10" fill="#F97316"/>
+  <path d="M233 185L409 122L582 248" stroke="url(#line)" stroke-width="4" stroke-linecap="round"/>
+  <rect x="510" y="80" width="164" height="84" rx="22" fill="#08111F" fill-opacity="0.78" stroke="#67E8F9" stroke-opacity="0.35"/>
+  <text x="540" y="117" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="16">Projects</text>
+  <text x="540" y="145" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="24" font-weight="700">Build + Ship</text>
+  <defs>
+    <linearGradient id="bg" x1="92" y1="42" x2="699" y2="358" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10243B" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#08111F" stop-opacity="0.98"/>
+    </linearGradient>
+    <linearGradient id="line" x1="233" y1="185" x2="582" y2="248" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D9D8B"/>
+      <stop offset="0.5" stop-color="#67E8F9"/>
+      <stop offset="1" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+</svg>

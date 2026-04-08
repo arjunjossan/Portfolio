@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block content %}
+<section class="px-4 pb-20 pt-32 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        {% include "includes/breadcrumb.html" %}
+        <div class="section-heading">
+            <span class="section-kicker">Skills</span>
+            <h1 class="section-title">A detailed breakdown of the technologies behind my work.</h1>
+        </div>
+        <form method="get" class="filter-form mt-10 grid gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-6 lg:grid-cols-4">
+            <input type="text" name="q" value="{{ active_query }}" placeholder="Search skills">
+            <select name="category"><option value="">All Categories</option>{% for item in skill_categories %}<option value="{{ item }}" {% if active_category == item %}selected{% endif %}>{{ item }}</option>{% endfor %}</select>
+            <select name="sort">
+                <option value="proficiency" {% if active_sort == 'proficiency' %}selected{% endif %}>Highest proficiency</option>
+                <option value="experience" {% if active_sort == 'experience' %}selected{% endif %}>Most experience</option>
+                <option value="name" {% if active_sort == 'name' %}selected{% endif %}>A-Z</option>
+            </select>
+            <button type="submit" class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950">Apply</button>
+        </form>
+        <div class="mt-12 space-y-10">
+            {% for category, skills in skill_groups.items %}
+                <div>
+                    <div class="mb-5 flex items-center justify-between">
+                        <h2 class="font-display text-2xl font-semibold text-white">{{ category }}</h2>
+                        <span class="text-xs uppercase tracking-[0.2em] text-slate-400">{{ skills|length }} skills</span>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        {% for skill in skills %}
+                            <article class="skill-card">
+                                <div class="flex items-center gap-4">
+                                    <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-lg text-teal-100"><i class="{{ skill.icon|default:'fa-solid fa-code' }}"></i></span>
+                                    <div>
+                                        <h3 class="font-semibold text-white">{{ skill.skill_name }}</h3>
+                                        <p class="text-sm text-slate-400">{{ skill.years_of_experience }} year{{ skill.years_of_experience|pluralize }} experience</p>
+                                    </div>
+                                </div>
+                                {% if skill.description %}<p class="mt-4 text-sm leading-7 text-slate-300">{{ skill.description }}</p>{% endif %}
+                                <div class="mt-4 flex gap-1 text-amber-300">{% for _ in skill.proficiency_level|stars %}<i class="fa-solid fa-star"></i>{% endfor %}</div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% empty %}
+                <div class="content-panel text-slate-300">No skills matched the current filters.</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

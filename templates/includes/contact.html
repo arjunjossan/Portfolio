@@ -1,0 +1,97 @@
+<div class="content-panel space-y-6" data-aos="fade-up">
+                {% if contact_info %}
+                    <div>
+                        <p class="text-sm uppercase tracking-[0.24em] text-slate-400">Email</p>
+                        <a href="mailto:{{ contact_info.email }}" class="mt-2 block text-xl font-semibold text-white transition hover:text-teal-100">{{ contact_info.email }}</a>
+                    </div>
+                    {% if contact_info.phone %}
+                        <div>
+                            <p class="text-sm uppercase tracking-[0.24em] text-slate-400">Phone</p>
+                            <a href="tel:{{ contact_info.phone }}" class="mt-2 block text-xl font-semibold text-white transition hover:text-teal-100">{{ contact_info.phone }}</a>
+                        </div>
+                    {% endif %}
+                    {% if contact_info.location %}
+                        <div>
+                            <p class="text-sm uppercase tracking-[0.24em] text-slate-400">Location</p>
+                            <p class="mt-2 text-lg text-slate-200">{{ contact_info.location }}</p>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if site_config.availability_status %}
+                    <div class="rounded-[1.5rem] border border-emerald-400/20 bg-emerald-400/10 p-5">
+                        <p class="text-sm uppercase tracking-[0.22em] text-emerald-100">Availability</p>
+                        <p class="mt-2 text-lg font-semibold text-white">{{ site_config.availability_status }}</p>
+                    </div>
+                {% endif %}
+                {% if global_social_links %}
+                    <div>
+                        <p class="text-sm uppercase tracking-[0.24em] text-slate-400">Social</p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            {% for social in global_social_links %}
+                                <a href="{{ social.profile_url }}" class="icon-btn" aria-label="{{ social.platform }}">
+                                    <i class="{{ social.icon_code }}"></i>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="content-panel" data-aos="fade-up" data-aos-delay="100">
+                <form method="post" enctype="multipart/form-data" class="space-y-5" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="contact">
+                    <div class="grid gap-5 md:grid-cols-2">
+                        <div>
+                            <label for="{{ contact_form.name.id_for_label }}" class="form-label">Name</label>
+                            {{ contact_form.name }}
+                            {% if contact_form.name.errors %}<p class="form-error">{{ contact_form.name.errors|join:", " }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ contact_form.email.id_for_label }}" class="form-label">Email</label>
+                            {{ contact_form.email }}
+                            {% if contact_form.email.errors %}<p class="form-error">{{ contact_form.email.errors|join:", " }}</p>{% endif %}
+                        </div>
+                    </div>
+                    <div class="grid gap-5 md:grid-cols-2">
+                        <div>
+                            <label for="{{ contact_form.phone.id_for_label }}" class="form-label">Phone</label>
+                            {{ contact_form.phone }}
+                            {% if contact_form.phone.errors %}<p class="form-error">{{ contact_form.phone.errors|join:", " }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ contact_form.company.id_for_label }}" class="form-label">Company</label>
+                            {{ contact_form.company }}
+                            {% if contact_form.company.errors %}<p class="form-error">{{ contact_form.company.errors|join:", " }}</p>{% endif %}
+                        </div>
+                    </div>
+                    <div class="grid gap-5 md:grid-cols-2">
+                        <div>
+                            <label for="{{ contact_form.message_type.id_for_label }}" class="form-label">Message Type</label>
+                            {{ contact_form.message_type }}
+                            {% if contact_form.message_type.errors %}<p class="form-error">{{ contact_form.message_type.errors|join:", " }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label for="{{ contact_form.subject.id_for_label }}" class="form-label">Subject</label>
+                            {{ contact_form.subject }}
+                            {% if contact_form.subject.errors %}<p class="form-error">{{ contact_form.subject.errors|join:", " }}</p>{% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <label for="{{ contact_form.message.id_for_label }}" class="form-label">Message</label>
+                        {{ contact_form.message }}
+                        <div class="mt-2 flex items-center justify-between">
+                            {% if contact_form.message.errors %}<p class="form-error">{{ contact_form.message.errors|join:", " }}</p>{% endif %}
+                            <p class="text-xs text-slate-500"><span id="messageCount">0</span> characters</p>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="{{ contact_form.attachment.id_for_label }}" class="form-label">Attachment</label>
+                        {{ contact_form.attachment }}
+                        {% if contact_form.attachment.errors %}<p class="form-error">{{ contact_form.attachment.errors|join:", " }}</p>{% endif %}
+                    </div>
+                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-4 text-sm font-semibold text-slate-950 transition duration-300 hover:-translate-y-1 hover:bg-slate-100">
+                        Send Message
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>

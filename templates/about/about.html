@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block content %}
+<section class="px-4 pb-20 pt-32 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl">
+        {% include "includes/breadcrumb.html" %}
+        <div class="section-heading">
+            <span class="section-kicker">About</span>
+            <h1 class="section-title">{{ about.title|default:"About Arjun Singh" }}</h1>
+        </div>
+        <div class="mt-12 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="content-panel about-image-panel">
+                {% if about and about.profile_image %}
+                    <div class="about-image-frame">
+                        <img src="{{ about.profile_image.url }}" alt="{{ about.title }}" class="about-profile-image">
+                    </div>
+                {% else %}
+                    <div class="about-image-frame flex items-end bg-[linear-gradient(160deg,_rgba(15,23,42,0.55),_rgba(29,157,139,0.35)),radial-gradient(circle_at_top,_rgba(255,255,255,0.18),_transparent_36%)] p-8">
+                        <p class="text-sm leading-7 text-slate-200">{{ about.background_summary|default:site_config.seo_description }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="space-y-6">
+                <div class="content-panel">
+                    <p class="text-lg leading-8 text-slate-300">{{ about.description|linebreaksbr }}</p>
+                    <p class="mt-6 leading-8 text-slate-400">{{ about.background_summary|linebreaksbr }}</p>
+                </div>
+                <div class="content-panel">
+                    <h2 class="font-display text-2xl font-semibold text-white">Career Direction</h2>
+                    <p class="mt-4 leading-8 text-slate-300">{{ about.masters_goals|default:about.background_summary|linebreaksbr }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {% for key, value in about.quick_facts|dict_items %}
+                <div class="stat-card"><p class="stat-value">{{ value }}</p><p class="stat-label">{{ key|cut:"_"|title }}</p></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

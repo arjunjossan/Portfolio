@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_SECRET_KEY = "django-insecure-change-me-before-production"
 
 def env(key, default=None, cast=str):
     value = os.getenv(key, default)
@@ -16,10 +17,14 @@ def env(key, default=None, cast=str):
 
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
-    "django-insecure-change-me-before-production",
+    DEFAULT_SECRET_KEY,
 )
 DEBUG = env("DJANGO_DEBUG", True, bool)
 ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost", list)
+CSRF_TRUSTED_ORIGINS = env("DJANGO_CSRF_TRUSTED_ORIGINS", "", list)
+
+if not DEBUG and SECRET_KEY == DEFAULT_SECRET_KEY:
+    raise ValueError("Set DJANGO_SECRET_KEY in production when DJANGO_DEBUG is False.")
 
 
 INSTALLED_APPS = [
@@ -115,7 +120,13 @@ CONTACT_NOTIFICATION_EMAIL = env('CONTACT_NOTIFICATION_EMAIL', DEFAULT_FROM_EMAI
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = env('SECURE_SSL_REDIRECT', not DEBUG, bool)
 CSRF_COOKIE_SECURE = env('CSRF_COOKIE_SECURE', False, bool)
 SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE', False, bool)
+CSRF_COOKIE_HTTPONLY = env('CSRF_COOKIE_HTTPONLY', False, bool)
+SECURE_HSTS_SECONDS = env('SECURE_HSTS_SECONDS', 0, int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env('SECURE_HSTS_INCLUDE_SUBDOMAINS', False, bool)
+SECURE_HSTS_PRELOAD = env('SECURE_HSTS_PRELOAD', False, bool)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

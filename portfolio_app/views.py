@@ -2,15 +2,34 @@ from collections import OrderedDict
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET
 
-from .forms import ContactSubmissionForm, SubscriberForm
+from .forms import (
+    AboutSectionDashboardForm,
+    CertificationDashboardForm,
+    ContactInformationDashboardForm,
+    ContactSubmissionDashboardForm,
+    ContactSubmissionForm,
+    EducationDashboardForm,
+    ExperienceDashboardForm,
+    HeroSectionDashboardForm,
+    PageMetaDataDashboardForm,
+    ProjectDashboardForm,
+    ProjectDetailImageDashboardForm,
+    SiteConfigurationDashboardForm,
+    SocialMediaLinkDashboardForm,
+    SubscriberDashboardForm,
+    SubscriberForm,
+    TechnicalSkillDashboardForm,
+)
 from .models import (
     AboutSection,
     Certification,
@@ -20,8 +39,12 @@ from .models import (
     HeroSection,
     PageMetaData,
     Project,
+    ProjectDetailImage,
+    SiteConfiguration,
     TechnicalSkill,
     Subscriber,
+    ContactSubmission,
+    SocialMediaLink,
 )
 
 
@@ -435,3 +458,249 @@ def server_error(request):
         status=500,
     )
     return response
+
+
+class DashboardLoginView(LoginView):
+    template_name = "dashboard/login.html"
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse("portfolio_app:dashboard_home")
+
+
+class DashboardLogoutView(LogoutView):
+    next_page = "portfolio_app:dashboard_login"
+
+
+dashboard_required = [login_required, user_passes_test(lambda user: user.is_staff)]
+
+
+def apply_dashboard_access(view_func):
+    for decorator in reversed(dashboard_required):
+        view_func = decorator(view_func)
+    return view_func
+
+
+DASHBOARD_MODELS = {
+    "site-configuration": {
+        "model": SiteConfiguration,
+        "form": SiteConfigurationDashboardForm,
+        "label": "Site Configuration",
+        "description": "Manage shared branding, SEO defaults, labels, and toggle settings.",
+        "singleton": True,
+        "list_fields": ("site_name", "availability_status", "is_active"),
+    },
+    "hero-section": {
+        "model": HeroSection,
+        "form": HeroSectionDashboardForm,
+        "label": "Hero Section",
+        "description": "Control the landing headline, CTA buttons, and hero media.",
+        "singleton": True,
+        "list_fields": ("title", "cover_style", "is_active"),
+    },
+    "about-section": {
+        "model": AboutSection,
+        "form": AboutSectionDashboardForm,
+        "label": "About Section",
+        "description": "Edit biography content, quick facts, and profile image.",
+        "singleton": True,
+        "list_fields": ("title", "is_active"),
+    },
+    "technical-skills": {
+        "model": TechnicalSkill,
+        "form": TechnicalSkillDashboardForm,
+        "label": "Technical Skills",
+        "description": "Maintain categories, proficiency, years of experience, and ordering.",
+        "list_fields": ("skill_name", "category", "proficiency_level", "years_of_experience", "order", "is_active"),
+    },
+    "projects": {
+        "model": Project,
+        "form": ProjectDashboardForm,
+        "label": "Projects",
+        "description": "Manage featured work, descriptions, links, and project metadata.",
+        "list_fields": ("title", "category", "status", "is_featured", "order", "is_active"),
+    },
+    "project-images": {
+        "model": ProjectDetailImage,
+        "form": ProjectDetailImageDashboardForm,
+        "label": "Project Detail Images",
+        "description": "Attach gallery images to projects and manage their ordering.",
+        "list_fields": ("project", "alt_text", "order", "is_active"),
+    },
+    "experience": {
+        "model": Experience,
+        "form": ExperienceDashboardForm,
+        "label": "Experience",
+        "description": "Manage work history, responsibilities, and company details.",
+        "list_fields": ("job_title", "company_name", "start_date", "end_date", "order", "is_active"),
+    },
+    "education": {
+        "model": Education,
+        "form": EducationDashboardForm,
+        "label": "Education",
+        "description": "Manage education, highlights, coursework, and branding assets.",
+        "list_fields": ("degree_name", "institution_name", "end_date", "order", "is_active"),
+    },
+    "certifications": {
+        "model": Certification,
+        "form": CertificationDashboardForm,
+        "label": "Certifications",
+        "description": "Maintain certifications, issuers, dates, and badge images.",
+        "list_fields": ("title", "issuer", "issue_date", "order", "is_active"),
+    },
+    "contact-information": {
+        "model": ContactInformation,
+        "form": ContactInformationDashboardForm,
+        "label": "Contact Information",
+        "description": "Manage email, phone, location, and resume availability.",
+        "singleton": True,
+        "list_fields": ("email", "phone", "location", "is_active"),
+    },
+    "social-links": {
+        "model": SocialMediaLink,
+        "form": SocialMediaLinkDashboardForm,
+        "label": "Social Links",
+        "description": "Manage portfolio social handles, icon classes, and ordering.",
+        "list_fields": ("platform", "profile_url", "order", "is_active"),
+    },
+    "contact-submissions": {
+        "model": ContactSubmission,
+        "form": ContactSubmissionDashboardForm,
+        "label": "Contact Submissions",
+        "description": "Review messages, mark items as read, and track responses.",
+        "list_fields": ("name", "email", "message_type", "submitted_at", "is_read", "response_sent"),
+    },
+    "subscribers": {
+        "model": Subscriber,
+        "form": SubscriberDashboardForm,
+        "label": "Subscribers",
+        "description": "Manage newsletter subscriptions and active states.",
+        "list_fields": ("email", "is_active", "subscribed_at"),
+    },
+    "page-metadata": {
+        "model": PageMetaData,
+        "form": PageMetaDataDashboardForm,
+        "label": "Page Metadata",
+        "description": "Manage SEO titles, descriptions, and Open Graph content.",
+        "list_fields": ("page_name", "meta_title"),
+    },
+}
+
+
+def get_dashboard_sections():
+    sections = []
+    for slug, config in DASHBOARD_MODELS.items():
+        model = config["model"]
+        sections.append(
+            {
+                "slug": slug,
+                "label": config["label"],
+                "description": config["description"],
+                "count": model.objects.count(),
+                "singleton": config.get("singleton", False),
+            }
+        )
+    return sections
+
+
+def get_dashboard_config(section_slug):
+    config = DASHBOARD_MODELS.get(section_slug)
+    if config is None:
+        raise Http404("Dashboard section not found.")
+    return config
+
+
+@apply_dashboard_access
+def dashboard_home(request):
+    context = {
+        "dashboard_sections": get_dashboard_sections(),
+        "page_title": "Dashboard",
+        "page_description": "Manage your portfolio content without using Django admin.",
+    }
+    return render(request, "dashboard/home.html", context)
+
+
+@apply_dashboard_access
+def dashboard_section_list(request, section_slug):
+    config = get_dashboard_config(section_slug)
+    objects = config["model"].objects.all()
+    list_fields = config.get("list_fields", ())
+    context = {
+        "dashboard_sections": get_dashboard_sections(),
+        "config": config,
+        "section_slug": section_slug,
+        "objects": objects,
+        "list_fields": list_fields,
+        "page_title": config["label"],
+        "page_description": config["description"],
+    }
+    return render(request, "dashboard/section_list.html", context)
+
+
+@apply_dashboard_access
+def dashboard_section_create(request, section_slug):
+    config = get_dashboard_config(section_slug)
+    if config.get("singleton") and config["model"].objects.exists():
+        messages.info(request, f"{config['label']} already exists. You can edit the current record instead.")
+        existing = config["model"].objects.first()
+        return redirect("portfolio_app:dashboard_edit", section_slug=section_slug, pk=existing.pk)
+
+    form = config["form"](request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        instance = form.save()
+        messages.success(request, f"{config['label']} created successfully.")
+        return redirect("portfolio_app:dashboard_edit", section_slug=section_slug, pk=instance.pk)
+
+    context = {
+        "dashboard_sections": get_dashboard_sections(),
+        "config": config,
+        "section_slug": section_slug,
+        "form": form,
+        "mode": "create",
+        "page_title": f"Add {config['label']}",
+        "page_description": config["description"],
+    }
+    return render(request, "dashboard/section_form.html", context)
+
+
+@apply_dashboard_access
+def dashboard_section_edit(request, section_slug, pk):
+    config = get_dashboard_config(section_slug)
+    instance = get_object_or_404(config["model"], pk=pk)
+    form = config["form"](request.POST or None, request.FILES or None, instance=instance)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, f"{config['label']} updated successfully.")
+        return redirect("portfolio_app:dashboard_edit", section_slug=section_slug, pk=instance.pk)
+
+    context = {
+        "dashboard_sections": get_dashboard_sections(),
+        "config": config,
+        "section_slug": section_slug,
+        "form": form,
+        "object": instance,
+        "mode": "edit",
+        "page_title": f"Edit {config['label']}",
+        "page_description": config["description"],
+    }
+    return render(request, "dashboard/section_form.html", context)
+
+
+@apply_dashboard_access
+def dashboard_section_delete(request, section_slug, pk):
+    config = get_dashboard_config(section_slug)
+    instance = get_object_or_404(config["model"], pk=pk)
+    if request.method == "POST":
+        instance.delete()
+        messages.success(request, f"{config['label']} entry deleted.")
+        return redirect("portfolio_app:dashboard_section", section_slug=section_slug)
+
+    context = {
+        "dashboard_sections": get_dashboard_sections(),
+        "config": config,
+        "section_slug": section_slug,
+        "object": instance,
+        "page_title": f"Delete {config['label']}",
+        "page_description": "Confirm deletion before removing this item.",
+    }
+    return render(request, "dashboard/confirm_delete.html", context)

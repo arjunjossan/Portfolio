@@ -1,15 +1,31 @@
 const root = document.documentElement;
 const themeToggles = document.querySelectorAll("#themeToggle, #themeToggleMobile");
-const savedTheme = localStorage.getItem("theme");
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+const getSavedTheme = () => {
+    try {
+        return window.localStorage.getItem("theme");
+    } catch (error) {
+        return null;
+    }
+};
+
+const persistTheme = (theme) => {
+    try {
+        window.localStorage.setItem("theme", theme);
+    } catch (error) {
+        // Ignore storage failures so the toggle still works for the current session.
+    }
+};
 
 const syncTheme = (theme) => {
     const isLight = theme === "light";
     root.classList.toggle("light", isLight);
-    localStorage.setItem("theme", isLight ? "light" : "dark");
+    persistTheme(isLight ? "light" : "dark");
 
     themeToggles.forEach((toggle) => {
         toggle?.setAttribute("aria-pressed", isLight ? "true" : "false");
+        toggle?.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
         toggle?.setAttribute("title", isLight ? "Switch to dark mode" : "Switch to light mode");
     });
 
@@ -18,6 +34,7 @@ const syncTheme = (theme) => {
     }
 };
 
+const savedTheme = getSavedTheme();
 syncTheme(savedTheme === "light" ? "light" : "dark");
 
 themeToggles.forEach((toggle) => {

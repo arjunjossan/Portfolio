@@ -1,0 +1,36 @@
+{% extends "dashboard/base.html" %}
+
+{% block page_actions %}
+    <a href="{% url 'portfolio_app:dashboard_section' section_slug %}" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm">Back to {{ config.label }}</a>
+{% endblock %}
+
+{% block dashboard_content %}
+<section class="rounded-[1.9rem] border border-white/70 bg-white/90 p-6 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-8">
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="rounded-[1.25rem] border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="grid gap-5 md:grid-cols-2">
+                {% for field in form %}
+                    <div class="{% if field.field.widget.input_type == 'textarea' %}md:col-span-2{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="mb-2 block text-sm font-semibold text-slate-800">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="mt-2 text-xs leading-6 text-slate-500">{{ field.help_text }}</p>
+                        {% endif %}
+                        {% if field.errors %}
+                            <p class="mt-2 text-sm text-rose-700">{{ field.errors|join:", " }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="flex flex-wrap gap-3 pt-2">
+                <button type="submit" class="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10">{{ mode|title }} {{ config.label }}</button>
+                {% if object %}
+                    <a href="{% url 'portfolio_app:dashboard_delete' section_slug object.pk %}" class="rounded-full border border-rose-200 bg-rose-50 px-6 py-3 text-sm font-semibold text-rose-700">Delete</a>
+                {% endif %}
+            </div>
+        </form>
+</section>
+{% endblock %}

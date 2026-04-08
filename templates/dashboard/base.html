@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title|default:"Dashboard" }} | Portfolio Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(13,148,136,0.08),_transparent_24%),radial-gradient(circle_at_top_right,_rgba(249,115,22,0.08),_transparent_20%),linear-gradient(180deg,_#f8fafc_0%,_#eef2f7_100%)] font-[Manrope] text-slate-900">
+    <div class="min-h-screen lg:grid lg:grid-cols-[300px_1fr]">
+        <aside class="relative overflow-hidden border-b border-white/10 bg-[linear-gradient(180deg,#0f172a_0%,#111827_48%,#0b1120_100%)] px-5 py-5 text-slate-100 lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r lg:border-slate-800">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(45,212,191,0.16),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(251,146,60,0.14),_transparent_22%)] opacity-90"></div>
+            <div class="relative flex h-full flex-col">
+                <a href="{% url 'portfolio_app:dashboard_home' %}" class="inline-flex items-center gap-3">
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] bg-gradient-to-br from-teal-300 via-cyan-300 to-amber-300 font-['Space_Grotesk'] text-base font-bold text-slate-950 shadow-lg shadow-teal-500/20">AS</span>
+                    <span>
+                        <span class="block font-['Space_Grotesk'] text-lg font-bold tracking-tight text-white">Studio Console</span>
+                        <span class="block text-xs text-slate-400">Portfolio operations dashboard</span>
+                    </span>
+                </a>
+
+                <nav class="mt-6 space-y-1.5">
+                    {% for section in dashboard_sections %}
+                        <a
+                            href="{% url 'portfolio_app:dashboard_section' section.slug %}"
+                            class="group flex items-center justify-between rounded-[1rem] border px-3.5 py-2.5 text-[13px] leading-5 transition {% if section_slug == section.slug %}border-white/20 bg-white text-slate-950 shadow-lg shadow-black/10{% else %}border-transparent bg-white/0 text-slate-300 hover:border-white/10 hover:bg-white/5 hover:text-white{% endif %}"
+                        >
+                            <span class="font-medium">{{ section.label }}</span>
+                            <span class="rounded-full px-2 py-0.5 text-[10px] font-bold {% if section_slug == section.slug %}bg-slate-100 text-slate-700{% else %}bg-slate-800 text-slate-300 group-hover:bg-slate-700{% endif %}">{{ section.count }}</span>
+                        </a>
+                    {% endfor %}
+                </nav>
+
+                <div class="mt-auto pt-5">
+                    <div class="rounded-[1.4rem] border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300 backdrop-blur">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-[0.2em] text-slate-500">Signed In</p>
+                            <p class="mt-1 font-semibold text-white">{{ request.user.username }}</p>
+                        </div>
+                        <span class="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-200">Live</span>
+                    </div>
+                    <div class="mt-4 flex gap-2.5">
+                        <a href="{% url 'portfolio_app:home' %}" class="rounded-full border border-slate-700 px-3.5 py-2 text-xs font-semibold text-slate-200 transition hover:border-slate-500 hover:text-white">View Site</a>
+                        <form method="post" action="{% url 'portfolio_app:dashboard_logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="rounded-full bg-gradient-to-r from-teal-300 to-amber-300 px-3.5 py-2 text-xs font-semibold text-slate-950">Logout</button>
+                        </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </aside>
+        <main class="px-4 py-6 sm:px-6 lg:px-10">
+            <div class="mx-auto max-w-7xl">
+                <header class="relative mb-6 overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur sm:p-8">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(45,212,191,0.12),_transparent_24%),radial-gradient(circle_at_top_right,_rgba(251,146,60,0.10),_transparent_22%)]"></div>
+                    <div class="relative flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+                        <div>
+                            <p class="text-[11px] font-bold uppercase tracking-[0.34em] text-teal-700">Custom Admin</p>
+                            <h1 class="mt-3 font-['Space_Grotesk'] text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">{{ page_title }}</h1>
+                            <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">{{ page_description }}</p>
+                        </div>
+                        <div class="relative">
+                            {% block page_actions %}{% endblock %}
+                        </div>
+                    </div>
+                </header>
+
+                {% if messages %}
+                    <div class="mb-6 space-y-3">
+                        {% for message in messages %}
+                            <div class="rounded-[1.25rem] border border-emerald-200 bg-[linear-gradient(180deg,#f0fdf4_0%,#ecfdf5_100%)] px-4 py-3 text-sm text-emerald-800 shadow-sm">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% block dashboard_content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

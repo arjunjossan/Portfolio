@@ -15,7 +15,7 @@
                     <a href="{% url 'portfolio_app:education' %}" class="nav-link {% if page_name == 'education' %}is-active{% endif %}">Education</a>
                     <a href="{% url 'portfolio_app:contact' %}" class="nav-link {% if page_name == 'contact' %}is-active{% endif %}">Contact</a>
                     {% if site_config.show_theme_toggle %}
-                        <button id="themeToggle" type="button" class="icon-btn" aria-label="Toggle color theme">
+                        <button id="themeToggle" type="button" class="icon-btn" aria-label="Toggle color theme" aria-pressed="false">
                             <i class="fa-solid fa-circle-half-stroke"></i>
                         </button>
                     {% endif %}
@@ -27,7 +27,7 @@
                 </div>
                 <div class="flex items-center gap-3 lg:hidden">
                     {% if site_config.show_theme_toggle %}
-                        <button id="themeToggleMobile" type="button" class="icon-btn" aria-label="Toggle color theme">
+                        <button id="themeToggleMobile" type="button" class="icon-btn" aria-label="Toggle color theme" aria-pressed="false">
                             <i class="fa-solid fa-circle-half-stroke"></i>
                         </button>
                     {% endif %}

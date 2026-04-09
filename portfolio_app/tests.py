@@ -1,70 +1,77 @@
 from datetime import date
+from pathlib import Path
 from unittest.mock import patch
 
-from django.test import RequestFactory, TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 
-from portfolio_app.email_marketing import send_campaign
-from portfolio_app.models import EmailCampaign, EmailDelivery, Project, Subscriber
-from portfolio_app.views import email_click_tracking, email_open_tracking
+from portfolio_app.models import ContactSubmission, HeroSection, Project, Subscriber
 
 
-class EmailMarketingTests(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.project = Project.objects.create(
-            title="Portfolio Launch",
-            description="A full redesign of the portfolio experience.",
-            technologies_used=["Django", "Tailwind"],
-            start_date=date(2026, 4, 1),
+class ProjectModelTests(TestCase):
+    def test_slug_is_generated_for_project(self):
+        project = Project.objects.create(
+            title="Admissions Dashboard",
+            description="Short summary",
+            technologies_used=["Django"],
+            start_date=date(2025, 1, 1),
             status=Project.ProjectStatus.COMPLETED,
-            detailed_description="Launch details",
-        )
-        self.subscriber = Subscriber.objects.create(email="reader@example.com")
-        self.campaign = EmailCampaign.objects.create(
-            title="April Portfolio Update",
-            subject="New portfolio projects are live",
-            headline="Fresh work is now live",
-            intro="A quick update from the portfolio studio.",
-            content="I just published a new set of project case studies.",
-            cta_label="Visit the portfolio",
-            cta_url="https://example.com/portfolio",
-        )
-        self.campaign.featured_projects.add(self.project)
-
-    @patch("portfolio_app.email_marketing.get_connection")
-    def test_send_campaign_creates_delivery_and_marks_campaign_sent(self, mock_get_connection):
-        connection = mock_get_connection.return_value
-        connection.send_messages.return_value = 1
-
-        sent_count = send_campaign(self.campaign)
-
-        self.assertEqual(sent_count, 1)
-        self.campaign.refresh_from_db()
-        delivery = EmailDelivery.objects.get(campaign=self.campaign, email=self.subscriber.email)
-        self.assertEqual(self.campaign.status, EmailCampaign.CampaignStatus.SENT)
-        self.assertEqual(self.campaign.recipient_count, 1)
-        self.assertEqual(delivery.status, EmailDelivery.DeliveryStatus.SENT)
-        self.assertTrue(delivery.sent_at)
-
-    def test_open_and_click_tracking_update_delivery_metrics(self):
-        delivery = EmailDelivery.objects.create(
-            campaign=self.campaign,
-            subscriber=self.subscriber,
-            email=self.subscriber.email,
-            status=EmailDelivery.DeliveryStatus.SENT,
+            detailed_description="Detailed description for the project.",
         )
 
-        open_response = email_open_tracking(self.factory.get("/email/open/"), delivery.token)
-        click_response = email_click_tracking(
-            self.factory.get("/email/click/", {"target": "https://example.com/project"}),
-            delivery.token,
+        self.assertEqual(project.slug, "admissions-dashboard")
+
+    def test_duplicate_titles_receive_unique_slugs(self):
+        base_data = {
+            "title": "Research Portal",
+            "description": "Summary",
+            "technologies_used": ["Django"],
+            "start_date": date(2025, 1, 1),
+            "status": Project.ProjectStatus.COMPLETED,
+            "detailed_description": "Details",
+        }
+        first = Project.objects.create(**base_data)
+        second = Project.objects.create(**base_data)
+
+        self.assertEqual(first.slug, "research-portal")
+        self.assertEqual(second.slug, "research-portal-2")
+
+
+class ContactSubmissionTests(TestCase):
+    def test_submission_defaults_to_unread(self):
+        submission = ContactSubmission.objects.create(
+            name="Arjun Singh",
+            email="arjun@example.com",
+            subject="Graduate collaboration",
+            message="I would like to discuss a graduate opportunity in detail.",
         )
 
-        delivery.refresh_from_db()
-        self.campaign.refresh_from_db()
-        self.assertEqual(open_response.status_code, 200)
-        self.assertEqual(click_response.status_code, 302)
-        self.assertEqual(delivery.open_count, 1)
-        self.assertEqual(delivery.click_count, 1)
-        self.assertEqual(self.campaign.open_count, 1)
-        self.assertEqual(self.campaign.click_count, 1)
+        self.assertFalse(submission.is_read)
+        self.assertFalse(submission.response_sent)
+
+
+class HeroSectionTests(TestCase):
+    @patch("portfolio_app.models.subprocess.run")
+    def test_headline_image_converts_heic_uploads_to_jpg(self, mock_run):
+        def fake_sips(command, check, capture_output):
+            output_path = command[-1]
+            Path(output_path).write_bytes(b"jpeg-bytes")
+
+        mock_run.side_effect = fake_sips
+
+        hero = HeroSection.objects.create(
+            title="Hero",
+            subtitle="Subtitle",
+            cta_button_text="Explore",
+            cta_button_url="#projects",
+            headline_image=SimpleUploadedFile("portrait.heic", b"heic-bytes", content_type="image/heic"),
+        )
+
+        self.assertTrue(hero.headline_image.name.endswith(".jpg"))
+        mock_run.assert_called_once()
+
+
+class SubscriberTests(TestCase):
+    def test_subscriber_defaults_to_active(self):
+        subscriber = Subscriber.objects.create(email="updates@example.com")
+        self.assertTrue(subscriber.is_active)

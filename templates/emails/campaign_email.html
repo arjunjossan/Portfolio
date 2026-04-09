@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ campaign.subject }}</title>
+</head>
+<body style="margin:0;padding:0;background:#f3f5f8;font-family:Arial,sans-serif;color:#0f172a;">
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+        {{ campaign.preview_text|default:campaign.subject }}
+    </div>
+    <table role="presentation" style="width:100%;border-collapse:collapse;background:#f3f5f8;">
+        <tr>
+            <td align="center" style="padding:32px 16px;">
+                <table role="presentation" style="width:100%;max-width:720px;border-collapse:collapse;background:#ffffff;border-radius:24px;overflow:hidden;">
+                    <tr>
+                        <td style="padding:20px 28px;background:linear-gradient(135deg,#0f172a,#1e293b);color:#ffffff;">
+                            <div style="font-size:12px;letter-spacing:0.28em;text-transform:uppercase;color:#7dd3fc;">{{ site_name }}</div>
+                            <h1 style="margin:14px 0 0;font-size:34px;line-height:1.15;">{{ campaign.headline|default:campaign.title }}</h1>
+                            {% if campaign.intro %}
+                                <p style="margin:14px 0 0;font-size:16px;line-height:1.7;color:#dbeafe;">{{ campaign.intro|linebreaksbr }}</p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:30px 28px 16px;">
+                            <div style="font-size:16px;line-height:1.8;color:#334155;">{{ campaign.content|linebreaksbr }}</div>
+                            {% if cta_url and campaign.cta_label %}
+                                <div style="margin-top:28px;">
+                                    <a href="{{ cta_url }}" style="display:inline-block;border-radius:999px;background:#0f172a;color:#ffffff;padding:14px 24px;text-decoration:none;font-weight:700;">{{ campaign.cta_label }}</a>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if featured_project_cards %}
+                        <tr>
+                            <td style="padding:8px 28px 30px;">
+                                <h2 style="margin:0 0 14px;font-size:18px;color:#0f172a;">Latest portfolio highlights</h2>
+                                {% for item in featured_project_cards %}
+                                    <table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #e2e8f0;border-radius:18px;margin-top:14px;">
+                                        <tr>
+                                            <td style="padding:18px;">
+                                                <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#0f766e;">{{ item.project.category }}</div>
+                                                <h3 style="margin:8px 0 8px;font-size:20px;color:#0f172a;">{{ item.project.title }}</h3>
+                                                <p style="margin:0;font-size:14px;line-height:1.7;color:#475569;">{{ item.project.description }}</p>
+                                                <div style="margin-top:14px;">
+                                                    <a href="{{ item.url }}" style="color:#0f172a;font-weight:700;text-decoration:none;">Read more</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td style="padding:20px 28px 28px;border-top:1px solid #e2e8f0;background:#f8fafc;">
+                            <p style="margin:0;font-size:12px;line-height:1.7;color:#64748b;">
+                                You are receiving this email because you subscribed to updates from {{ site_name }}.
+                                {% if unsubscribe_url %}
+                                    <a href="{{ unsubscribe_url }}" style="color:#0f172a;font-weight:700;">Unsubscribe</a>
+                                {% endif %}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    {% if tracking_pixel_url %}
+        <img src="{{ tracking_pixel_url }}" alt="" width="1" height="1" style="display:block;border:0;" />
+    {% endif %}
+</body>
+</html>

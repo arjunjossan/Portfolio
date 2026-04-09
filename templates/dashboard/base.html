@@ -13,9 +13,9 @@
 </head>
 <body class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(13,148,136,0.08),_transparent_24%),radial-gradient(circle_at_top_right,_rgba(249,115,22,0.08),_transparent_20%),linear-gradient(180deg,_#f8fafc_0%,_#eef2f7_100%)] font-[Manrope] text-slate-900">
     <div class="min-h-screen lg:grid lg:grid-cols-[300px_1fr]">
-        <aside class="relative overflow-hidden border-b border-white/10 bg-[linear-gradient(180deg,#0f172a_0%,#111827_48%,#0b1120_100%)] px-5 py-5 text-slate-100 lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r lg:border-slate-800">
+        <aside class="relative border-b border-white/10 bg-[linear-gradient(180deg,#0f172a_0%,#111827_48%,#0b1120_100%)] px-5 py-5 text-slate-100 lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r lg:border-slate-800">
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(45,212,191,0.16),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(251,146,60,0.14),_transparent_22%)] opacity-90"></div>
-            <div class="relative flex h-full flex-col">
+            <div class="relative flex h-full min-h-0 flex-col">
                 <a href="{% url 'portfolio_app:dashboard_home' %}" class="inline-flex items-center gap-3">
                     <span class="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] bg-gradient-to-br from-teal-300 via-cyan-300 to-amber-300 font-['Space_Grotesk'] text-base font-bold text-slate-950 shadow-lg shadow-teal-500/20">AS</span>
                     <span>
@@ -24,7 +24,7 @@
                     </span>
                 </a>
 
-                <nav class="mt-6 space-y-1.5">
+                <nav class="mt-6 space-y-1.5 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
                     {% for section in dashboard_sections %}
                         <a
                             href="{% url 'portfolio_app:dashboard_section' section.slug %}"
@@ -36,7 +36,7 @@
                     {% endfor %}
                 </nav>
 
-                <div class="mt-auto pt-5">
+                <div class="mt-5 shrink-0 pt-5">
                     <div class="rounded-[1.4rem] border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300 backdrop-blur">
                     <div class="flex items-center justify-between gap-3">
                         <div>

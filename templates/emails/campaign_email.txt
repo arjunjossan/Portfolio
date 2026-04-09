@@ -1,0 +1,18 @@
+{{ campaign.headline|default:campaign.title }}
+
+{{ campaign.preview_text|default:"" }}
+
+{% if campaign.intro %}{{ campaign.intro }}
+
+{% endif %}{{ campaign.content }}
+
+{% if cta_url and campaign.cta_label %}{{ campaign.cta_label }}: {{ cta_url }}
+
+{% endif %}{% if featured_project_cards %}Portfolio highlights:
+{% for item in featured_project_cards %}
+- {{ item.project.title }}: {{ item.project.description }}
+  Read more: {{ item.url }}
+{% endfor %}
+
+{% endif %}{% if unsubscribe_url %}Unsubscribe: {{ unsubscribe_url }}
+{% endif %}

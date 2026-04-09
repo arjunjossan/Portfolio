@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from urllib.parse import unquote, urlparse
 
 from django.conf import settings
 from django.contrib import messages
@@ -7,9 +8,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.views.decorators.http import require_GET
 
 from .forms import (
@@ -18,6 +20,7 @@ from .forms import (
     ContactInformationDashboardForm,
     ContactSubmissionDashboardForm,
     ContactSubmissionForm,
+    EmailCampaignDashboardForm,
     EducationDashboardForm,
     ExperienceDashboardForm,
     HeroSectionDashboardForm,
@@ -30,10 +33,13 @@ from .forms import (
     SubscriberForm,
     TechnicalSkillDashboardForm,
 )
+from .email_marketing import build_campaign_email, send_campaign, send_test_campaign, sync_campaign_metrics
 from .models import (
     AboutSection,
     Certification,
     ContactInformation,
+    EmailCampaign,
+    EmailDelivery,
     Education,
     Experience,
     HeroSection,
@@ -163,6 +169,24 @@ def home(request):
         "home_contact_success_prompt": request.GET.get("contact_submitted", "").strip() == "1",
     }
     return render(request, "home/index.html", context)
+
+
+def unsubscribe(request, token):
+    subscriber = get_object_or_404(Subscriber, unsubscribe_token=token)
+    if subscriber.is_active:
+        subscriber.is_active = False
+        subscriber.unsubscribed_at = timezone.now()
+        subscriber.save(update_fields=["is_active", "unsubscribed_at"])
+
+    context = {
+        **base_page_context(
+            "unsubscribe",
+            "Unsubscribed Successfully",
+            "Your email has been removed from future portfolio campaign updates.",
+        ),
+        "subscriber": subscriber,
+    }
+    return render(request, "home/unsubscribe.html", context)
 
 
 def about(request):
@@ -577,6 +601,13 @@ DASHBOARD_MODELS = {
         "description": "Manage newsletter subscriptions and active states.",
         "list_fields": ("email", "is_active", "subscribed_at"),
     },
+    "email-campaigns": {
+        "model": EmailCampaign,
+        "form": EmailCampaignDashboardForm,
+        "label": "Email Campaigns",
+        "description": "Draft and send update emails to active portfolio subscribers.",
+        "list_fields": ("title", "campaign_type", "status", "audience", "scheduled_for", "recipient_count", "open_rate", "click_rate", "sent_at"),
+    },
     "page-metadata": {
         "model": PageMetaData,
         "form": PageMetaDataDashboardForm,
@@ -648,6 +679,9 @@ def dashboard_section_create(request, section_slug):
     form = config["form"](request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         instance = form.save()
+        if hasattr(instance, "created_by") and not instance.created_by_id:
+            instance.created_by = request.user
+            instance.save(update_fields=["created_by", "updated_at"])
         messages.success(request, f"{config['label']} created successfully.")
         return redirect("portfolio_app:dashboard_edit", section_slug=section_slug, pk=instance.pk)
 
@@ -684,6 +718,99 @@ def dashboard_section_edit(request, section_slug, pk):
         "page_description": config["description"],
     }
     return render(request, "dashboard/section_form.html", context)
+
+
+@apply_dashboard_access
+def send_email_campaign(request, pk):
+    if request.method != "POST":
+        raise Http404("Campaign sending requires a POST request.")
+
+    campaign = get_object_or_404(EmailCampaign, pk=pk)
+    if campaign.status == EmailCampaign.CampaignStatus.SENT:
+        messages.info(request, "This campaign has already been sent.")
+        return redirect("portfolio_app:dashboard_edit", section_slug="email-campaigns", pk=campaign.pk)
+
+    if not campaign.get_target_subscribers().exists():
+        messages.warning(request, "No active subscribers are available for this campaign.")
+        return redirect("portfolio_app:dashboard_edit", section_slug="email-campaigns", pk=campaign.pk)
+
+    delivery_count = send_campaign(campaign, request=request)
+    messages.success(request, f"Campaign sent to {delivery_count} subscribers.")
+    return redirect("portfolio_app:dashboard_edit", section_slug="email-campaigns", pk=campaign.pk)
+
+
+@apply_dashboard_access
+def preview_email_campaign(request, pk):
+    campaign = get_object_or_404(EmailCampaign, pk=pk)
+    preview_delivery = EmailDelivery(campaign=campaign, email=request.user.email or settings.DEFAULT_FROM_EMAIL)
+    text_body, html_body = build_campaign_email(campaign, request=request, delivery=preview_delivery)
+    context = {
+        "campaign": campaign,
+        "html_body": html_body,
+        "text_body": text_body,
+        "dashboard_sections": get_dashboard_sections(),
+        "section_slug": "email-campaigns",
+        "page_title": f"Preview: {campaign.title}",
+        "page_description": "Review the exact email layout before sending it to subscribers.",
+    }
+    return render(request, "dashboard/email_campaign_preview.html", context)
+
+
+@apply_dashboard_access
+def send_test_email_campaign(request, pk):
+    if request.method != "POST":
+        raise Http404("Test sending requires a POST request.")
+
+    campaign = get_object_or_404(EmailCampaign, pk=pk)
+    recipients = [email.strip() for email in campaign.test_recipients.split(",") if email.strip()]
+    if not recipients:
+        fallback_recipient = (request.user.email or settings.DEFAULT_FROM_EMAIL).strip()
+        recipients = [fallback_recipient] if fallback_recipient else []
+    if not recipients:
+        messages.warning(request, "Add test recipients to this campaign or set an email on your admin account.")
+        return redirect("portfolio_app:dashboard_edit", section_slug="email-campaigns", pk=campaign.pk)
+
+    sent_count = send_test_campaign(campaign, recipients, request=request)
+    messages.success(request, f"Test email sent to {sent_count} recipient(s).")
+    return redirect("portfolio_app:dashboard_edit", section_slug="email-campaigns", pk=campaign.pk)
+
+
+@require_GET
+def email_open_tracking(request, token):
+    delivery = get_object_or_404(EmailDelivery, token=token)
+    if delivery.status in {EmailDelivery.DeliveryStatus.SENT, EmailDelivery.DeliveryStatus.TEST}:
+        delivery.open_count += 1
+        if not delivery.opened_at:
+            delivery.opened_at = timezone.now()
+        delivery.save(update_fields=["open_count", "opened_at", "updated_at"])
+        sync_campaign_metrics(delivery.campaign)
+
+    pixel = (
+        b"GIF89a\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00"
+        b"\xff\xff\xff!\xf9\x04\x01\x00\x00\x00\x00,\x00"
+        b"\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;"
+    )
+    return HttpResponse(pixel, content_type="image/gif")
+
+
+@require_GET
+def email_click_tracking(request, token):
+    delivery = get_object_or_404(EmailDelivery, token=token)
+    target = unquote(request.GET.get("target", ""))
+    parsed = urlparse(target)
+    if not target or (parsed.scheme and parsed.scheme not in {"http", "https"}):
+        return redirect("portfolio_app:home")
+
+    if delivery.status in {EmailDelivery.DeliveryStatus.SENT, EmailDelivery.DeliveryStatus.TEST}:
+        delivery.click_count += 1
+        if not delivery.clicked_at:
+            delivery.clicked_at = timezone.now()
+        delivery.save(update_fields=["click_count", "clicked_at", "updated_at"])
+        sync_campaign_metrics(delivery.campaign)
+
+    if parsed.scheme and parsed.netloc:
+        return redirect(target)
+    return redirect(target or "portfolio_app:home")
 
 
 @apply_dashboard_access

@@ -114,8 +114,16 @@ EMAIL_BACKEND = env(
     'DJANGO_EMAIL_BACKEND',
     'django.core.mail.backends.console.EmailBackend',
 )
+EMAIL_HOST = env('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = env('EMAIL_PORT', 587, int)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS', True, bool)
+EMAIL_USE_SSL = env('EMAIL_USE_SSL', False, bool)
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', 'portfolio@example.com')
 CONTACT_NOTIFICATION_EMAIL = env('CONTACT_NOTIFICATION_EMAIL', DEFAULT_FROM_EMAIL)
+SITE_NAME = env('SITE_NAME', 'Arjun Singh Portfolio')
+SITE_URL = env('SITE_URL', 'http://127.0.0.1:8000')
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True

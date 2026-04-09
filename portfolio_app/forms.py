@@ -9,6 +9,7 @@ from .models import (
     Certification,
     ContactInformation,
     ContactSubmission,
+    EmailCampaign,
     Education,
     Experience,
     HeroSection,
@@ -222,6 +223,54 @@ class SubscriberDashboardForm(DashboardModelForm):
     class Meta:
         model = Subscriber
         fields = "__all__"
+
+
+class EmailCampaignDashboardForm(DashboardModelForm):
+    test_recipients = forms.CharField(
+        required=False,
+        widget=forms.TextInput(),
+        help_text="Send previews to these addresses from the dashboard before launching the full campaign.",
+    )
+
+    class Meta:
+        model = EmailCampaign
+        fields = [
+            "title",
+            "campaign_type",
+            "audience",
+            "subject",
+            "preview_text",
+            "template_style",
+            "headline",
+            "intro",
+            "content",
+            "cta_label",
+            "cta_url",
+            "featured_projects",
+            "include_latest_projects",
+            "latest_projects_count",
+            "track_opens",
+            "track_clicks",
+            "scheduled_for",
+            "test_recipients",
+            "internal_notes",
+        ]
+        widgets = {
+            "content": forms.Textarea(attrs={"rows": 10}),
+            "intro": forms.Textarea(attrs={"rows": 4}),
+            "internal_notes": forms.Textarea(attrs={"rows": 4}),
+            "scheduled_for": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "featured_projects": forms.SelectMultiple(attrs={"size": 8}),
+        }
+
+    def clean_test_recipients(self):
+        value = self.cleaned_data["test_recipients"].strip()
+        if not value:
+            return ""
+        emails = [email.strip().lower() for email in value.split(",") if email.strip()]
+        for email in emails:
+            forms.EmailField().clean(email)
+        return ", ".join(emails)
 
 
 class PageMetaDataDashboardForm(DashboardModelForm):

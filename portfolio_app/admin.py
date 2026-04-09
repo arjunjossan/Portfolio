@@ -173,9 +173,9 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
 
 @admin.register(Subscriber)
 class SubscriberAdmin(admin.ModelAdmin):
-    list_display = ("email", "is_active", "subscribed_at", "unsubscribed_at")
+    list_display = ("name", "email", "is_active", "subscribed_at", "unsubscribed_at")
     list_filter = ("is_active", "subscribed_at", "unsubscribed_at")
-    search_fields = ("email",)
+    search_fields = ("name", "email")
     list_editable = ("is_active",)
     readonly_fields = ("unsubscribe_token", "unsubscribed_at")
 

@@ -114,6 +114,16 @@ class ContactSubmissionForm(forms.ModelForm):
 class SubscriberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["name"].required = False
+        self.fields["name"].widget.attrs.update(
+            {
+                "class": (
+                    "block w-full rounded-full border border-white/10 bg-slate-900/80 px-5 py-4 "
+                    "text-white placeholder:text-slate-500 focus:border-teal focus:ring-teal"
+                ),
+                "placeholder": "Enter your full name",
+            }
+        )
         self.fields["email"].widget.attrs.update(
             {
                 "class": (
@@ -126,7 +136,10 @@ class SubscriberForm(forms.ModelForm):
 
     class Meta:
         model = Subscriber
-        fields = ["email"]
+        fields = ["name", "email"]
+
+    def clean_name(self):
+        return self.cleaned_data["name"].strip()
 
     def clean_email(self):
         return self.cleaned_data["email"].strip().lower()

@@ -6,6 +6,7 @@ app_name = "portfolio_app"
 
 urlpatterns = [
     path("", views.home, name="home"),
+    path("subscribe/", views.subscribe_popup, name="subscribe_popup"),
     path("unsubscribe/<uuid:token>/", views.unsubscribe, name="unsubscribe"),
     path("dashboard/login/", views.DashboardLoginView.as_view(), name="dashboard_login"),
     path("dashboard/logout/", views.DashboardLogoutView.as_view(), name="dashboard_logout"),

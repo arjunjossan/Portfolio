@@ -166,6 +166,59 @@
         </main>
         {% include "includes/footer.html" %}
     </div>
+    <div
+        id="welcomePopup"
+        class="welcome-popup-overlay"
+        hidden
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="welcomePopupTitle"
+    >
+        <div class="welcome-popup-dialog">
+            <button type="button" class="welcome-popup-close" data-popup-close aria-label="Close welcome popup">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <p class="welcome-popup-kicker">Stay Connected</p>
+            <h2 id="welcomePopupTitle" class="welcome-popup-title">Share your name and Gmail to get portfolio updates.</h2>
+            <p class="welcome-popup-copy">
+                I’ll occasionally send major project launches, fresh case studies, and meaningful portfolio updates.
+            </p>
+            <form method="post" action="{% url 'portfolio_app:subscribe_popup' %}" class="welcome-popup-form" id="welcomePopupForm">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <div class="welcome-popup-field-group">
+                    <label for="popupSubscriberName" class="welcome-popup-label">Your name</label>
+                    <input
+                        id="popupSubscriberName"
+                        name="name"
+                        type="text"
+                        class="welcome-popup-input"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+                <div class="welcome-popup-field-group">
+                    <label for="popupSubscriberEmail" class="welcome-popup-label">Gmail address</label>
+                    <input
+                        id="popupSubscriberEmail"
+                        name="email"
+                        type="email"
+                        class="welcome-popup-input"
+                        placeholder="yourname@gmail.com"
+                        autocomplete="email"
+                        inputmode="email"
+                        required
+                    >
+                </div>
+                <div class="welcome-popup-actions">
+                    <button type="submit" class="welcome-popup-primary">Save My Details</button>
+                    <button type="button" class="welcome-popup-secondary" data-popup-close>Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <button id="scrollToTop" class="scroll-top-btn" aria-label="Scroll to top">
         <i class="fa-solid fa-arrow-up"></i>
     </button>

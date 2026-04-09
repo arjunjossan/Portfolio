@@ -2,6 +2,7 @@ from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
+from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
@@ -75,3 +76,17 @@ class SubscriberTests(TestCase):
     def test_subscriber_defaults_to_active(self):
         subscriber = Subscriber.objects.create(email="updates@example.com")
         self.assertTrue(subscriber.is_active)
+
+    def test_popup_subscription_stores_name_and_email(self):
+        response = self.client.post(
+            reverse("portfolio_app:subscribe_popup"),
+            {
+                "name": "Arjun Singh",
+                "email": "arjun242042@gmail.com",
+                "next": reverse("portfolio_app:home"),
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        subscriber = Subscriber.objects.get(email="arjun242042@gmail.com")
+        self.assertEqual(subscriber.name, "Arjun Singh")

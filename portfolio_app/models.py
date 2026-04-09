@@ -375,6 +375,7 @@ class ContactSubmission(models.Model):
 
 
 class Subscriber(models.Model):
+    name = models.CharField(max_length=120, blank=True)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     subscribed_at = models.DateTimeField(auto_now_add=True)
@@ -385,7 +386,7 @@ class Subscriber(models.Model):
         ordering = ["-subscribed_at"]
 
     def __str__(self):
-        return self.email
+        return self.name or self.email
 
     def unsubscribe_path(self):
         return reverse("portfolio_app:unsubscribe", args=[self.unsubscribe_token])

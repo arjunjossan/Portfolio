@@ -10,8 +10,9 @@ from django.db.models import Q
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils import timezone
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 
 from .forms import (
     AboutSectionDashboardForm,
@@ -104,23 +105,68 @@ def handle_subscriber_submission(request, success_redirect):
     form = SubscriberForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data["email"]
+        name = form.cleaned_data["name"]
         anchor = request.POST.get("subscription_anchor", "subscribe-updates").strip() or "subscribe-updates"
         if anchor not in {"subscribe-updates", "footer-subscribe"}:
             anchor = "subscribe-updates"
         subscriber, created = Subscriber.objects.get_or_create(
             email=email,
-            defaults={"is_active": True},
+            defaults={"name": name, "is_active": True},
         )
         status = "subscribed"
         if not created and not subscriber.is_active:
             subscriber.is_active = True
-            subscriber.save(update_fields=["is_active"])
+            if name and not subscriber.name:
+                subscriber.name = name
+                subscriber.save(update_fields=["name", "is_active"])
+            else:
+                subscriber.save(update_fields=["is_active"])
             status = "reactivated"
         elif not created and subscriber.is_active:
+            if name and not subscriber.name:
+                subscriber.name = name
+                subscriber.save(update_fields=["name"])
             status = "already_subscribed"
         return redirect(f"{reverse(success_redirect)}?subscription={status}&subscription_anchor={anchor}#{anchor}")
     messages.error(request, "Please enter a valid email address to subscribe.")
     return form
+
+
+@require_POST
+def subscribe_popup(request):
+    form = SubscriberForm(request.POST)
+    next_url = request.POST.get("next", "").strip()
+    if not url_has_allowed_host_and_scheme(
+        url=next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        next_url = reverse("portfolio_app:home")
+
+    if form.is_valid():
+        email = form.cleaned_data["email"]
+        name = form.cleaned_data["name"]
+        subscriber, created = Subscriber.objects.get_or_create(
+            email=email,
+            defaults={"name": name, "is_active": True},
+        )
+
+        if not created:
+            updated_fields = []
+            if name and not subscriber.name:
+                subscriber.name = name
+                updated_fields.append("name")
+            if not subscriber.is_active:
+                subscriber.is_active = True
+                updated_fields.append("is_active")
+            if updated_fields:
+                subscriber.save(update_fields=updated_fields)
+
+        messages.success(request, "Thanks for sharing your details. You're on the update list now.")
+    else:
+        messages.error(request, "Please enter your name and a valid Gmail address.")
+
+    return redirect(next_url or reverse("portfolio_app:home"))
 
 
 def home(request):
@@ -594,7 +640,7 @@ DASHBOARD_MODELS = {
         "form": SubscriberDashboardForm,
         "label": "Subscribers",
         "description": "Manage newsletter subscriptions and active states.",
-        "list_fields": ("email", "is_active", "subscribed_at"),
+        "list_fields": ("name", "email", "is_active", "subscribed_at"),
     },
     "page-metadata": {
         "model": PageMetaData,

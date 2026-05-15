@@ -300,6 +300,31 @@ html.light body {
     z-index: 1;
 }
 
+.hero-main-title {
+    margin: 0;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(3.4rem, 7.5vw, 6.6rem);
+    font-weight: 700;
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+    text-shadow: 0 14px 38px rgba(8, 17, 31, 0.28);
+}
+
+.hero-main-title::first-line {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.hero-main-subtitle {
+    font-family: "Manrope", sans-serif;
+    font-size: clamp(1.05rem, 2.1vw, 1.28rem);
+    line-height: 1.9;
+    letter-spacing: 0.01em;
+    color: rgb(203 213 225);
+}
+
 .about-image-panel {
     display: flex;
     align-items: center;
@@ -327,6 +352,16 @@ html.light body {
 }
 
 @media (max-width: 768px) {
+    .hero-main-title {
+        font-size: clamp(2.8rem, 12vw, 4.4rem);
+        line-height: 0.98;
+    }
+
+    .hero-main-subtitle {
+        font-size: 1rem;
+        line-height: 1.75;
+    }
+
     .hero-cover-content {
         padding: 1.25rem;
     }
@@ -2072,6 +2107,15 @@ html.light textarea {
 
 html.light .section-kicker {
     color: #115e59;
+}
+
+html.light .hero-main-title {
+    color: #08111f;
+    text-shadow: 0 14px 32px rgba(148, 163, 184, 0.18);
+}
+
+html.light .hero-main-subtitle {
+    color: #334155;
 }
 
 html.light .hero-card,

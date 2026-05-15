@@ -21,8 +21,8 @@
                 </div>
             {% endif %}
             <span class="section-kicker">{{ site_config.accent_text|default:"Developer portfolio" }}</span>
-            <h1 class="mt-6 font-display text-5xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl">{{ hero.title|default:"Hi, I'm Arjun Singh" }}</h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">{{ hero.subtitle|default:site_config.seo_description }}</p>
+            <h1 class="hero-main-title mt-6 text-white">{{ hero.title|default:"Hi, I'm Arjun Singh" }}</h1>
+            <p class="hero-main-subtitle mt-6 max-w-2xl text-slate-300">{{ hero.subtitle|default:site_config.seo_description }}</p>
             <div class="mt-8 flex flex-col gap-4 sm:flex-row">
                 <a href="{% url 'portfolio_app:projects' %}" class="inline-flex items-center justify-center gap-2 rounded-full bg-teal px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-teal/90">Explore Projects <i class="fa-solid fa-arrow-right"></i></a>
                 <a href="{% url 'portfolio_app:about' %}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:border-white/40">Learn About Me</a>

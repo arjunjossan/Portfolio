@@ -7,12 +7,12 @@
     <div class="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
         <div class="lg:-translate-y-8" data-aos="fade-right">
             {% if global_social_links %}
-                <div class="mb-4 flex flex-wrap items-center gap-3">
+                <div class="home-hero-socials mb-4 flex flex-wrap items-center gap-3">
                     {% for social in global_social_links %}
                         <a
                             href="{{ social.profile_url }}"
                             aria-label="{{ social.platform }}"
-                            class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white shadow-soft backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-teal/50 hover:bg-teal/10 hover:text-teal-100"
+                            class="home-hero-social-link inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white shadow-soft backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-teal/50 hover:bg-teal/10 hover:text-teal-100"
                             style="animation: heroSocialFloat 3.2s ease-in-out infinite; animation-delay: {{ forloop.counter0 }}00ms;"
                         >
                             <i class="{{ social.icon_code }}"></i>
@@ -24,17 +24,17 @@
             <h1 class="hero-main-title mt-6 text-white">{{ hero.title|default:"Hi, I'm Arjun Singh" }}</h1>
             <p class="hero-main-subtitle mt-6 max-w-2xl text-slate-300">{{ hero.subtitle|default:site_config.seo_description }}</p>
             <div class="mt-8 flex flex-col gap-4 sm:flex-row">
-                <a href="{% url 'portfolio_app:projects' %}" class="inline-flex items-center justify-center gap-2 rounded-full bg-teal px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-teal/90">Explore Projects <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="{% url 'portfolio_app:about' %}" class="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:border-white/40">Learn About Me</a>
-                <a href="{% url 'portfolio_app:contact' %}" class="inline-flex items-center justify-center gap-2 rounded-full border border-teal/30 bg-teal/10 px-7 py-4 text-sm font-semibold text-teal-50 transition duration-300 hover:-translate-y-1 hover:border-teal/60">Get In Touch</a>
+                <a href="{% url 'portfolio_app:projects' %}" class="home-hero-button home-hero-button-primary inline-flex items-center justify-center gap-2 rounded-full bg-teal px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:bg-teal/90">Explore Projects <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'portfolio_app:about' %}" class="home-hero-button home-hero-button-secondary inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-1 hover:border-white/40">Learn About Me</a>
+                <a href="{% url 'portfolio_app:contact' %}" class="home-hero-button home-hero-button-accent inline-flex items-center justify-center gap-2 rounded-full border border-teal/30 bg-teal/10 px-7 py-4 text-sm font-semibold text-teal-50 transition duration-300 hover:-translate-y-1 hover:border-teal/60">Get In Touch</a>
             </div>
         </div>
-        <div class="hero-card" data-aos="fade-left">
-            <div class="hero-cover hero-cover--{{ hero.cover_style|default:'classic' }}">
+        <div class="hero-card home-hero-card" data-aos="fade-left">
+            <div class="hero-cover home-hero-cover hero-cover--{{ hero.cover_style|default:'classic' }}">
                 {% if hero and hero.headline_image %}
-                    <img src="{{ hero.headline_image.url }}" alt="{{ hero.title }}" class="hero-cover-image">
+                    <img src="{{ hero.headline_image.url }}" alt="{{ hero.title }}" class="hero-cover-image home-hero-image">
                 {% else %}
-                    <div class="hero-placeholder">
+                    <div class="hero-placeholder home-hero-placeholder">
                         <div class="hero-graphic-wrap">
                             <img src="{% static 'images/hero-orbit.svg' %}" alt="Abstract technology graphic" class="hero-graphic">
                         </div>

@@ -74,13 +74,50 @@ html.light body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.05);
     color: white;
-    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    box-shadow: 0 12px 28px rgba(8, 17, 31, 0.14);
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
 }
 
 .icon-btn:hover {
     transform: translateY(-2px);
     border-color: rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 16px 34px rgba(8, 17, 31, 0.18);
+}
+
+.home-hero-social-link {
+    box-shadow:
+        0 14px 28px rgba(8, 17, 31, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.home-hero-social-link i {
+    font-size: 1rem;
+}
+
+.home-hero-button {
+    position: relative;
+    box-shadow:
+        0 18px 38px rgba(8, 17, 31, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.home-hero-button:hover {
+    box-shadow:
+        0 24px 48px rgba(8, 17, 31, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.home-hero-button-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+}
+
+.home-hero-button-accent {
+    box-shadow:
+        0 18px 38px rgba(21, 128, 61, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 .hero-card,
@@ -90,8 +127,11 @@ html.light body {
 .stat-card {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 18px 60px rgba(8, 17, 31, 0.12);
+    box-shadow:
+        0 24px 68px rgba(8, 17, 31, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(18px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .hero-card {
@@ -107,6 +147,7 @@ html.light body {
     min-height: 32rem;
     height: 100%;
     align-items: stretch;
+    border-radius: 1.7rem;
 }
 
 .hero-cover-image,
@@ -119,6 +160,24 @@ html.light body {
 .hero-cover-image {
     object-fit: cover;
     object-position: center 18%;
+}
+
+.home-hero-card {
+    box-shadow:
+        0 30px 84px rgba(8, 17, 31, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.home-hero-card::after {
+    content: "";
+    position: absolute;
+    inset: auto 10% -16% 10%;
+    height: 22%;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(29, 157, 139, 0.18), transparent 70%);
+    filter: blur(28px);
+    opacity: 0.7;
+    pointer-events: none;
 }
 
 .hero-placeholder {
@@ -490,6 +549,7 @@ html.light body {
     background:
         radial-gradient(circle at top, rgba(103, 232, 249, 0.1), transparent 34%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .skills-orbit {
@@ -614,6 +674,7 @@ html.light body {
     background:
         radial-gradient(circle at top, rgba(103, 232, 249, 0.12), transparent 40%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .section-graphic {
@@ -627,6 +688,7 @@ html.light body {
     background:
         radial-gradient(circle at top left, rgba(29, 157, 139, 0.12), transparent 34%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .subscribe-panel {
@@ -635,6 +697,7 @@ html.light body {
     background:
         radial-gradient(circle at top, rgba(103, 232, 249, 0.1), transparent 32%),
         linear-gradient(180deg, rgba(8, 17, 31, 0.18), rgba(8, 17, 31, 0.1));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .compact-home-contact .content-panel {
@@ -700,7 +763,7 @@ html.light body {
 .project-card {
     overflow: hidden;
     border-radius: 1.8rem;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .project-card:hover,
@@ -708,6 +771,9 @@ html.light body {
 .content-panel:hover {
     transform: translateY(-4px);
     border-color: rgba(29, 157, 139, 0.4);
+    box-shadow:
+        0 28px 76px rgba(8, 17, 31, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .project-media {
@@ -2125,6 +2191,60 @@ html.light .home-hero-backdrop {
         linear-gradient(180deg, #f9fbff 0%, #eef4fb 52%, #f8fafc 100%);
 }
 
+html.light .home-hero-social-link {
+    border-color: rgba(15, 23, 42, 0.1);
+    background: rgba(255, 255, 255, 0.94);
+    color: #0f172a;
+    box-shadow:
+        0 16px 34px rgba(15, 23, 42, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+html.light .home-hero-social-link:hover {
+    border-color: rgba(20, 184, 166, 0.28);
+    background: rgba(240, 253, 250, 0.96);
+    color: #0f766e;
+    box-shadow:
+        0 20px 42px rgba(15, 23, 42, 0.14),
+        0 0 0 6px rgba(45, 212, 191, 0.08);
+}
+
+html.light .home-hero-button {
+    box-shadow:
+        0 16px 34px rgba(15, 23, 42, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+html.light .home-hero-button:hover {
+    box-shadow:
+        0 22px 46px rgba(15, 23, 42, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+html.light .home-hero-button-secondary {
+    border-color: rgba(15, 23, 42, 0.12);
+    background: rgba(255, 255, 255, 0.94);
+    color: #0f172a;
+}
+
+html.light .home-hero-button-secondary:hover {
+    border-color: rgba(15, 23, 42, 0.18);
+    background: rgba(255, 255, 255, 1);
+    color: #08111f;
+}
+
+html.light .home-hero-button-accent {
+    border-color: rgba(20, 184, 166, 0.22);
+    background: rgba(20, 184, 166, 0.12);
+    color: #115e59;
+}
+
+html.light .home-hero-button-accent:hover {
+    border-color: rgba(20, 184, 166, 0.34);
+    background: rgba(20, 184, 166, 0.16);
+    color: #134e4a;
+}
+
 html.light .hero-card,
 html.light .content-panel,
 html.light .project-card,
@@ -2227,6 +2347,50 @@ html.light .site-header-resume-link:hover {
     background: #1e293b;
 }
 
+html.light .home-hero-card,
+html.light .content-panel,
+html.light .project-card,
+html.light .skill-card,
+html.light .stat-card {
+    box-shadow:
+        0 24px 58px rgba(15, 23, 42, 0.08),
+        0 2px 0 rgba(255, 255, 255, 0.7) inset;
+}
+
+html.light .home-hero-card {
+    border-color: rgba(15, 23, 42, 0.1);
+}
+
+html.light .home-hero-card::after {
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+    opacity: 0.85;
+}
+
+html.light .home-hero-cover {
+    padding: 0.9rem;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(236, 242, 248, 0.96));
+}
+
+html.light .home-hero-image,
+html.light .home-hero-placeholder {
+    border-radius: 1.35rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f5f8fc 100%);
+    box-shadow: 0 20px 46px rgba(15, 23, 42, 0.12);
+}
+
+html.light .hero-cover-overlay {
+    inset: 0.9rem;
+    border-radius: 1.35rem;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(15, 23, 42, 0.04) 26%, rgba(15, 23, 42, 0.22) 68%, rgba(15, 23, 42, 0.5) 100%),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.02) 36%, rgba(15, 23, 42, 0.14) 100%),
+        radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.52), transparent 24%);
+}
+
+html.light .hero-cover-content {
+    inset: 0.9rem;
+}
+
 html.light .site-footer {
     border-color: rgba(15, 23, 42, 0.08);
     background:
@@ -2262,7 +2426,9 @@ html.light .site-footer [class*="bg-white/5"] {
 
 html.light .site-footer-subscribe,
 html.light .site-footer-nav {
-    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+    box-shadow:
+        0 18px 42px rgba(15, 23, 42, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 html.light .site-footer-input {
@@ -2326,6 +2492,15 @@ html.light .site-pagination-link:hover {
     border-color: rgba(15, 23, 42, 0.16);
     background: rgba(255, 255, 255, 0.98);
     color: #08111f;
+}
+
+html.light .project-card:hover,
+html.light .skill-card:hover,
+html.light .content-panel:hover,
+html.light .home-hero-card:hover {
+    box-shadow:
+        0 28px 72px rgba(15, 23, 42, 0.12),
+        0 2px 0 rgba(255, 255, 255, 0.78) inset;
 }
 
 html.light main [class*="bg-slate-950/70"],
@@ -2524,6 +2699,9 @@ html.light .subscribe-panel {
     background:
         radial-gradient(circle at top, rgba(44, 165, 245, 0.08), transparent 34%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(241, 245, 249, 0.86));
+    box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 html.light .skills-orbit {

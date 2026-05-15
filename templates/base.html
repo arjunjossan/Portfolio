@@ -176,49 +176,79 @@
         aria-labelledby="welcomePopupTitle"
     >
         <div class="welcome-popup-dialog">
+            <div class="welcome-popup-glow welcome-popup-glow-one"></div>
+            <div class="welcome-popup-glow welcome-popup-glow-two"></div>
             <button type="button" class="welcome-popup-close" data-popup-close aria-label="Close welcome popup">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <p class="welcome-popup-kicker">Stay Connected</p>
-            <h2 id="welcomePopupTitle" class="welcome-popup-title">Share your name and Gmail to get portfolio updates.</h2>
-            <p class="welcome-popup-copy">
-                I’ll occasionally send major project launches, fresh case studies, and meaningful portfolio updates.
-            </p>
-            <form method="post" action="{% url 'portfolio_app:subscribe_popup' %}" class="welcome-popup-form" id="welcomePopupForm">
-                {% csrf_token %}
-                <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                <div class="welcome-popup-field-group">
-                    <label for="popupSubscriberName" class="welcome-popup-label">Your name</label>
-                    <input
-                        id="popupSubscriberName"
-                        name="name"
-                        type="text"
-                        class="welcome-popup-input"
-                        placeholder="Enter your full name"
-                        autocomplete="name"
-                        required
-                    >
-                </div>
-                <div class="welcome-popup-field-group">
-                    <label for="popupSubscriberEmail" class="welcome-popup-label">Gmail address</label>
-                    <input
-                        id="popupSubscriberEmail"
-                        name="email"
-                        type="email"
-                        class="welcome-popup-input"
-                        placeholder="yourname@gmail.com"
-                        autocomplete="email"
-                        inputmode="email"
-                        required
-                    >
-                </div>
-                <div class="welcome-popup-actions">
-                    <button type="submit" class="welcome-popup-primary">Save My Details</button>
-                    <button type="button" class="welcome-popup-secondary" data-popup-close>Cancel</button>
-                </div>
-            </form>
+            <div class="welcome-popup-form-shell">
+                <p class="welcome-popup-kicker">Stay Connected</p>
+                <h2 id="welcomePopupTitle" class="welcome-popup-title">Get portfolio updates in your inbox.</h2>
+                <p class="welcome-popup-copy">
+                    Share your name and Gmail to receive occasional project launches and major portfolio updates.
+                </p>
+                <form method="post" action="{% url 'portfolio_app:subscribe_popup' %}" class="welcome-popup-form" id="welcomePopupForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <div class="welcome-popup-field-group">
+                        <label for="popupSubscriberName" class="welcome-popup-label">Your name</label>
+                        <input
+                            id="popupSubscriberName"
+                            name="name"
+                            type="text"
+                            class="welcome-popup-input"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
+                        >
+                    </div>
+                    <div class="welcome-popup-field-group">
+                        <label for="popupSubscriberEmail" class="welcome-popup-label">Gmail address</label>
+                        <input
+                            id="popupSubscriberEmail"
+                            name="email"
+                            type="email"
+                            class="welcome-popup-input"
+                            placeholder="yourname@gmail.com"
+                            autocomplete="email"
+                            inputmode="email"
+                            required
+                        >
+                    </div>
+                    <div class="welcome-popup-actions">
+                        <button type="submit" class="welcome-popup-primary">Save My Details</button>
+                        <button type="button" class="welcome-popup-secondary" data-popup-close>Cancel</button>
+                    </div>
+                </form>
+                <p class="welcome-popup-footnote">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    Simple updates only. No spam.
+                </p>
+            </div>
         </div>
     </div>
+    {% if popup_feedback_prompt %}
+        <div
+            id="popupFeedbackPrompt"
+            class="popup-feedback-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="popupFeedbackTitle"
+            data-popup-feedback-status="{{ popup_feedback_prompt.status }}"
+        >
+            <div class="popup-feedback-dialog popup-feedback-dialog--{{ popup_feedback_prompt.theme }}">
+                <span class="popup-feedback-icon" aria-hidden="true">
+                    <i class="{{ popup_feedback_prompt.icon }}"></i>
+                </span>
+                <p class="popup-feedback-kicker">{{ popup_feedback_prompt.eyebrow }}</p>
+                <h2 id="popupFeedbackTitle" class="popup-feedback-title">{{ popup_feedback_prompt.title }}</h2>
+                <p class="popup-feedback-copy">{{ popup_feedback_prompt.copy }}</p>
+                <div class="popup-feedback-actions">
+                    <button type="button" class="popup-feedback-button" id="popupFeedbackPromptOkay">Okay</button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {% if whatsapp_widget and whatsapp_widget.is_active and whatsapp_widget.whatsapp_url %}
         <div class="whatsapp-widget" id="whatsappWidget" data-whatsapp-widget>
             <div

@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.contrib import messages
@@ -77,6 +78,21 @@ def base_page_context(page_name, title, description):
     }
 
 
+def append_query_params(url, params):
+    split_url = urlsplit(url)
+    query = dict(parse_qsl(split_url.query, keep_blank_values=True))
+    query.update(params)
+    return urlunsplit(
+        (
+            split_url.scheme,
+            split_url.netloc,
+            split_url.path,
+            urlencode(query),
+            split_url.fragment,
+        )
+    )
+
+
 def handle_contact_submission(request, success_redirect):
     form = ContactSubmissionForm(request.POST, request.FILES)
     if form.is_valid():
@@ -153,6 +169,8 @@ def subscribe_popup(request):
             defaults={"name": name, "is_active": True},
         )
 
+        status = "subscribed"
+
         if not created:
             updated_fields = []
             if name and not subscriber.name:
@@ -161,14 +179,20 @@ def subscribe_popup(request):
             if not subscriber.is_active:
                 subscriber.is_active = True
                 updated_fields.append("is_active")
+                status = "reactivated"
+            elif not updated_fields:
+                status = "already_subscribed"
             if updated_fields:
                 subscriber.save(update_fields=updated_fields)
-
-        messages.success(request, "Thanks for sharing your details. You're on the update list now.")
     else:
-        messages.error(request, "Please enter your name and a valid Gmail address.")
+        status = "invalid"
 
-    return redirect(next_url or reverse("portfolio_app:home"))
+    return redirect(
+        append_query_params(
+            next_url or reverse("portfolio_app:home"),
+            {"popup_subscription": status},
+        )
+    )
 
 
 def home(request):

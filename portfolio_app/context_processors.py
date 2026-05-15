@@ -8,6 +8,47 @@ def site_context(request):
     site_config = SiteConfiguration.objects.filter(is_active=True).first()
     global_contact = ContactInformation.objects.filter(is_active=True).first()
     whatsapp_widget = WhatsAppWidget.objects.filter(is_active=True).first()
+    popup_subscription_status = request.GET.get("popup_subscription", "").strip()
+    popup_feedback_prompt = None
+
+    if popup_subscription_status:
+        popup_prompt_map = {
+            "subscribed": {
+                "status": "subscribed",
+                "theme": "success",
+                "eyebrow": "Saved Successfully",
+                "title": "You are on the update list now.",
+                "copy": "Thanks for sharing your details. I will send meaningful portfolio launches, case studies, and major updates here.",
+                "icon": "fa-solid fa-check",
+            },
+            "reactivated": {
+                "status": "reactivated",
+                "theme": "success",
+                "eyebrow": "Subscription Restored",
+                "title": "Your updates are active again.",
+                "copy": "Welcome back. This email will receive future portfolio releases and important project announcements.",
+                "icon": "fa-solid fa-rotate-right",
+            },
+            "already_subscribed": {
+                "status": "already_subscribed",
+                "theme": "info",
+                "eyebrow": "Already Subscribed",
+                "title": "This email is already registered.",
+                "copy": "You are already in the portfolio updates circle, so there is nothing else you need to do.",
+                "icon": "fa-solid fa-bell",
+            },
+            "invalid": {
+                "status": "invalid",
+                "theme": "error",
+                "eyebrow": "Submission Incomplete",
+                "title": "Please enter a valid name and Gmail address.",
+                "copy": "Your details were not saved this time. Review the form and try again with complete information.",
+                "icon": "fa-solid fa-triangle-exclamation",
+            },
+        }
+        prompt_config = popup_prompt_map.get(popup_subscription_status)
+        if prompt_config:
+            popup_feedback_prompt = SimpleNamespace(**prompt_config)
 
     if whatsapp_widget is None:
         fallback_phone_number = ""
@@ -50,5 +91,6 @@ def site_context(request):
         "global_contact": global_contact,
         "global_social_links": SocialMediaLink.objects.filter(is_active=True).order_by("order", "platform"),
         "global_page_meta": {item.page_name: item for item in PageMetaData.objects.all()},
+        "popup_feedback_prompt": popup_feedback_prompt,
         "whatsapp_widget": whatsapp_widget,
     }

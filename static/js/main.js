@@ -207,7 +207,17 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
 });
 
 const welcomePopup = document.getElementById("welcomePopup");
+const popupFeedbackPrompt = document.getElementById("popupFeedbackPrompt");
+const popupFeedbackPromptOkay = document.getElementById("popupFeedbackPromptOkay");
 const popupStorageKey = "portfolio_welcome_popup_dismissed_v2";
+
+const openWelcomePopup = () => {
+    if (!welcomePopup) {
+        return;
+    }
+    welcomePopup.hidden = false;
+    welcomePopup.setAttribute("aria-hidden", "false");
+};
 
 const closeWelcomePopup = () => {
     if (!welcomePopup) {
@@ -222,6 +232,45 @@ const closeWelcomePopup = () => {
     }
 };
 
+const clearPopupSubscriptionParam = () => {
+    try {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.delete("popup_subscription");
+        window.history.replaceState({}, "", currentUrl.toString());
+    } catch (error) {
+        // Ignore URL manipulation issues and keep the current address.
+    }
+};
+
+const closePopupFeedbackPrompt = () => {
+    if (!popupFeedbackPrompt) {
+        return;
+    }
+
+    const feedbackStatus = popupFeedbackPrompt.dataset.popupFeedbackStatus || "";
+    popupFeedbackPrompt.hidden = true;
+    clearPopupSubscriptionParam();
+
+    if (feedbackStatus === "invalid" && welcomePopup) {
+        try {
+            window.localStorage.removeItem(popupStorageKey);
+        } catch (error) {
+            // Ignore storage failures and just reopen the popup.
+        }
+        openWelcomePopup();
+    }
+};
+
+if (popupFeedbackPrompt) {
+    popupFeedbackPromptOkay?.addEventListener("click", closePopupFeedbackPrompt);
+
+    popupFeedbackPrompt.addEventListener("click", (event) => {
+        if (event.target === popupFeedbackPrompt) {
+            closePopupFeedbackPrompt();
+        }
+    });
+}
+
 if (welcomePopup) {
     let popupDismissed = false;
     try {
@@ -230,10 +279,9 @@ if (welcomePopup) {
         popupDismissed = false;
     }
 
-    if (!popupDismissed) {
+    if (!popupDismissed && !popupFeedbackPrompt) {
         window.setTimeout(() => {
-            welcomePopup.hidden = false;
-            welcomePopup.setAttribute("aria-hidden", "false");
+            openWelcomePopup();
         }, 700);
     }
 
@@ -257,7 +305,9 @@ if (welcomePopup) {
     });
 
     document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !welcomePopup.hidden) {
+        if (event.key === "Escape" && popupFeedbackPrompt && !popupFeedbackPrompt.hidden) {
+            closePopupFeedbackPrompt();
+        } else if (event.key === "Escape" && !welcomePopup.hidden) {
             closeWelcomePopup();
         }
     });

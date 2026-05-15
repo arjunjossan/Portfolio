@@ -67,3 +67,10 @@ class HomeViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="whatsappWidgetToggle"', html=False)
         self.assertContains(response, "https://wa.me/919876543210", html=False)
+
+    def test_home_renders_popup_feedback_prompt_from_query_state(self):
+        response = self.client.get(f"{reverse('portfolio_app:home')}?popup_subscription=subscribed")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="popupFeedbackPrompt"', html=False)
+        self.assertContains(response, "You are on the update list now.")

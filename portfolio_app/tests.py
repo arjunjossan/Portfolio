@@ -88,5 +88,6 @@ class SubscriberTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
+        self.assertIn("popup_subscription=subscribed", response.url)
         subscriber = Subscriber.objects.get(email="arjun242042@gmail.com")
         self.assertEqual(subscriber.name, "Arjun Singh")

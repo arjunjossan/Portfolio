@@ -31,6 +31,7 @@ from .forms import (
     SubscriberDashboardForm,
     SubscriberForm,
     TechnicalSkillDashboardForm,
+    WhatsAppWidgetDashboardForm,
 )
 from .models import (
     AboutSection,
@@ -47,6 +48,7 @@ from .models import (
     SocialMediaLink,
     Subscriber,
     TechnicalSkill,
+    WhatsAppWidget,
 )
 
 
@@ -554,6 +556,14 @@ DASHBOARD_MODELS = {
         "description": "Manage shared branding, SEO defaults, labels, and toggle settings.",
         "singleton": True,
         "list_fields": ("site_name", "availability_status", "is_active"),
+    },
+    "whatsapp-widget": {
+        "model": WhatsAppWidget,
+        "form": WhatsAppWidgetDashboardForm,
+        "label": "WhatsApp Widget",
+        "description": "Manage the floating WhatsApp button, text, and click-through message.",
+        "singleton": True,
+        "list_fields": ("title", "phone_number", "button_text", "is_active"),
     },
     "hero-section": {
         "model": HeroSection,

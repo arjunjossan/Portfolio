@@ -2,6 +2,7 @@ import subprocess
 import tempfile
 import uuid
 from pathlib import Path
+from urllib.parse import quote
 
 from django.core.files.base import ContentFile
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -41,6 +42,47 @@ class SiteConfiguration(models.Model):
 
     def __str__(self):
         return self.site_name
+
+
+class WhatsAppWidget(models.Model):
+    label = models.CharField(max_length=40, default="WhatsApp")
+    title = models.CharField(max_length=90, default="Start a conversation")
+    subtitle = models.CharField(max_length=120, default="Usually replies within a few hours")
+    description = models.TextField(
+        default="Share your project, question, or collaboration idea and continue the conversation on WhatsApp."
+    )
+    phone_number = models.CharField(
+        max_length=32,
+        help_text="Include country code, for example 919876543210 or +91 98765 43210.",
+    )
+    prefilled_message = models.CharField(
+        max_length=255,
+        blank=True,
+        default="Hello, I came across your portfolio and would like to connect.",
+    )
+    button_text = models.CharField(max_length=40, default="Open WhatsApp")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "WhatsApp widget"
+        verbose_name_plural = "WhatsApp widget"
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def normalized_phone_number(self):
+        return "".join(character for character in self.phone_number if character.isdigit())
+
+    @property
+    def whatsapp_url(self):
+        phone_number = self.normalized_phone_number
+        if not phone_number:
+            return ""
+
+        if self.prefilled_message:
+            return f"https://wa.me/{phone_number}?text={quote(self.prefilled_message)}"
+        return f"https://wa.me/{phone_number}"
 
 
 class HeroSection(models.Model):

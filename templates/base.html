@@ -219,6 +219,54 @@
             </form>
         </div>
     </div>
+    {% if whatsapp_widget and whatsapp_widget.is_active and whatsapp_widget.whatsapp_url %}
+        <div class="whatsapp-widget" id="whatsappWidget" data-whatsapp-widget>
+            <div
+                id="whatsappWidgetCard"
+                class="whatsapp-widget-card"
+                hidden
+                aria-hidden="true"
+            >
+                <div class="whatsapp-widget-card-header">
+                    <span class="whatsapp-widget-badge">{{ whatsapp_widget.label }}</span>
+                    <h2 class="whatsapp-widget-title">{{ whatsapp_widget.title }}</h2>
+                    <p class="whatsapp-widget-subtitle">{{ whatsapp_widget.subtitle }}</p>
+                </div>
+                <div class="whatsapp-widget-card-body">
+                    <div class="whatsapp-widget-message">
+                        <span class="whatsapp-widget-message-icon" aria-hidden="true">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </span>
+                        <p>{{ whatsapp_widget.description }}</p>
+                    </div>
+                    <a
+                        href="{{ whatsapp_widget.whatsapp_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="whatsapp-widget-cta"
+                    >
+                        <span>{{ whatsapp_widget.button_text }}</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+            <button
+                type="button"
+                id="whatsappWidgetToggle"
+                class="whatsapp-widget-toggle"
+                aria-expanded="false"
+                aria-controls="whatsappWidgetCard"
+                aria-label="Open WhatsApp chat"
+            >
+                <span class="whatsapp-widget-toggle-icon whatsapp-widget-toggle-icon--chat" data-whatsapp-icon="chat">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </span>
+                <span class="whatsapp-widget-toggle-icon whatsapp-widget-toggle-icon--close" data-whatsapp-icon="close" hidden>
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </button>
+        </div>
+    {% endif %}
     <button id="scrollToTop" class="scroll-top-btn" aria-label="Scroll to top">
         <i class="fa-solid fa-arrow-up"></i>
     </button>

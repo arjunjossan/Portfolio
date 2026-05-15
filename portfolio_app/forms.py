@@ -19,6 +19,7 @@ from .models import (
     SocialMediaLink,
     Subscriber,
     TechnicalSkill,
+    WhatsAppWidget,
 )
 
 
@@ -151,6 +152,12 @@ class SubscriberForm(forms.ModelForm):
 class SiteConfigurationDashboardForm(DashboardModelForm):
     class Meta:
         model = SiteConfiguration
+        fields = "__all__"
+
+
+class WhatsAppWidgetDashboardForm(DashboardModelForm):
+    class Meta:
+        model = WhatsAppWidget
         fields = "__all__"
 
 

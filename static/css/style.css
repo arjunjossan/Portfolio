@@ -2019,6 +2019,159 @@ textarea:focus {
     transform: translateY(-1px);
 }
 
+.whatsapp-widget {
+    position: fixed;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.9rem;
+}
+
+.whatsapp-widget-card {
+    width: min(100vw - 2rem, 22rem);
+    overflow: hidden;
+    border-radius: 1.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.14), transparent 28%),
+        linear-gradient(180deg, #25d366 0%, #1ea857 100%);
+    box-shadow: 0 24px 70px rgba(7, 28, 22, 0.3);
+    animation: whatsappWidgetReveal 0.24s ease;
+}
+
+.whatsapp-widget-card-header {
+    padding: 1.1rem 1.1rem 0.95rem;
+    color: white;
+}
+
+.whatsapp-widget-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    padding: 0.38rem 0.72rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.whatsapp-widget-title {
+    margin-top: 0.75rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.whatsapp-widget-subtitle {
+    margin-top: 0.35rem;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.whatsapp-widget-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding: 1rem 1.1rem 1.1rem;
+    background: rgba(244, 255, 249, 0.96);
+}
+
+.whatsapp-widget-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    border-radius: 1.25rem;
+    background: white;
+    padding: 0.95rem 1rem;
+    color: #103227;
+    box-shadow: 0 10px 30px rgba(25, 135, 84, 0.1);
+}
+
+.whatsapp-widget-message p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.whatsapp-widget-message-icon {
+    display: inline-flex;
+    height: 2.2rem;
+    width: 2.2rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(37, 211, 102, 0.14);
+    color: #1fa855;
+    font-size: 1.15rem;
+}
+
+.whatsapp-widget-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    padding: 0.95rem 1.1rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: white;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.whatsapp-widget-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px rgba(18, 140, 126, 0.24);
+}
+
+.whatsapp-widget-toggle {
+    display: inline-flex;
+    height: 4rem;
+    width: 4rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 0;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: white;
+    font-size: 1.75rem;
+    box-shadow: 0 20px 48px rgba(18, 140, 126, 0.34);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.whatsapp-widget-toggle:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 24px 56px rgba(18, 140, 126, 0.38);
+}
+
+.whatsapp-widget.is-open .whatsapp-widget-toggle {
+    background: linear-gradient(135deg, #163f35 0%, #0f766e 100%);
+}
+
+.whatsapp-widget-toggle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes whatsappWidgetReveal {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .contact-tag-grid {
     margin-top: 1rem;
     display: flex;
@@ -2140,7 +2293,7 @@ textarea:focus {
 .scroll-top-btn {
     position: fixed;
     right: 1.5rem;
-    bottom: 1.5rem;
+    bottom: 6.25rem;
     display: inline-flex;
     height: 3rem;
     width: 3rem;
@@ -2663,6 +2816,20 @@ html.light .welcome-popup-secondary {
     color: #08111f;
 }
 
+html.light .whatsapp-widget-card {
+    border-color: rgba(15, 23, 42, 0.08);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.16);
+}
+
+html.light .whatsapp-widget-card-body {
+    background: rgba(255, 255, 255, 0.96);
+}
+
+html.light .whatsapp-widget-message {
+    color: #0f172a;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
 html.light .contact-location-overlay {
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.45)),
@@ -2828,6 +2995,21 @@ html.light .project-case-study [class*="bg-white/"] {
         width: 100%;
     }
 
+    .whatsapp-widget {
+        right: 1rem;
+        bottom: 1rem;
+        left: 1rem;
+        align-items: stretch;
+    }
+
+    .whatsapp-widget-card {
+        width: 100%;
+    }
+
+    .whatsapp-widget-toggle {
+        align-self: flex-end;
+    }
+
     .skills-visual {
         padding: 0 1rem 1rem;
     }
@@ -2856,6 +3038,11 @@ html.light .project-case-study [class*="bg-white/"] {
 
     .timeline::before {
         left: 0.95rem;
+    }
+
+    .scroll-top-btn {
+        right: 1rem;
+        bottom: 5.75rem;
     }
 
     .timeline-item {

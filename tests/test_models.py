@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-from portfolio_app.models import ContactSubmission, HeroSection, Project, Subscriber
+from portfolio_app.models import ContactSubmission, HeroSection, Project, Subscriber, WhatsAppWidget
 
 
 class ProjectModelTests(TestCase):
@@ -74,3 +74,14 @@ class SubscriberTests(TestCase):
     def test_subscriber_defaults_to_active(self):
         subscriber = Subscriber.objects.create(email="updates@example.com")
         self.assertTrue(subscriber.is_active)
+
+
+class WhatsAppWidgetTests(TestCase):
+    def test_whatsapp_url_normalizes_phone_and_encodes_message(self):
+        widget = WhatsAppWidget.objects.create(
+            phone_number="+91 98765 43210",
+            prefilled_message="Hello there",
+        )
+
+        self.assertEqual(widget.normalized_phone_number, "919876543210")
+        self.assertEqual(widget.whatsapp_url, "https://wa.me/919876543210?text=Hello%20there")

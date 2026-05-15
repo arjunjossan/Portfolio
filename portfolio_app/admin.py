@@ -18,6 +18,7 @@ from .models import (
     SocialMediaLink,
     Subscriber,
     TechnicalSkill,
+    WhatsAppWidget,
 )
 
 
@@ -55,6 +56,35 @@ class SingletonAdmin(admin.ModelAdmin):
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonAdmin):
     list_display = ("site_name", "availability_status", "show_theme_toggle", "is_active")
+
+
+@admin.register(WhatsAppWidget)
+class WhatsAppWidgetAdmin(SingletonAdmin):
+    list_display = ("title", "phone_number", "button_text", "is_active")
+    fieldsets = (
+        (
+            "Widget content",
+            {
+                "fields": (
+                    "label",
+                    "title",
+                    "subtitle",
+                    "description",
+                    "button_text",
+                )
+            },
+        ),
+        (
+            "WhatsApp settings",
+            {
+                "fields": (
+                    "phone_number",
+                    "prefilled_message",
+                    "is_active",
+                ),
+            },
+        ),
+    )
 
 
 @admin.register(HeroSection)

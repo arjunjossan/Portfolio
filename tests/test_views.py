@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from portfolio_app.models import Subscriber
+from portfolio_app.models import Subscriber, WhatsAppWidget
 
 
 class HomeViewTests(TestCase):
@@ -54,3 +54,16 @@ class HomeViewTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertIn("?subscription=already_subscribed", response.url)
+
+    def test_home_renders_whatsapp_widget_when_configured(self):
+        WhatsAppWidget.objects.create(
+            phone_number="+91 98765 43210",
+            title="Chat on WhatsApp",
+            button_text="Message Now",
+        )
+
+        response = self.client.get(reverse("portfolio_app:home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="whatsappWidgetToggle"', html=False)
+        self.assertContains(response, "https://wa.me/919876543210", html=False)

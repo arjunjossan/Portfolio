@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from portfolio_app.models import SiteConfiguration, TechnicalSkill
+from portfolio_app.models import SiteConfiguration, TechnicalSkill, WhatsAppWidget
 
 
 class DashboardTests(TestCase):
@@ -61,3 +61,22 @@ class DashboardTests(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(TechnicalSkill.objects.count(), 1)
+
+    def test_dashboard_can_create_whatsapp_widget(self):
+        self.client.login(username="staffuser", password="testpass123")
+        response = self.client.post(
+            reverse("portfolio_app:dashboard_create", args=["whatsapp-widget"]),
+            {
+                "label": "WhatsApp",
+                "title": "Let's chat",
+                "subtitle": "Replies soon",
+                "description": "Share your project details.",
+                "phone_number": "+91 98765 43210",
+                "prefilled_message": "Hello from the portfolio",
+                "button_text": "Open WhatsApp",
+                "is_active": "on",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(WhatsAppWidget.objects.count(), 1)

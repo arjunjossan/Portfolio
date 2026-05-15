@@ -64,6 +64,56 @@ scrollButton?.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
+const whatsappWidget = document.querySelector("[data-whatsapp-widget]");
+const whatsappWidgetToggle = document.getElementById("whatsappWidgetToggle");
+const whatsappWidgetCard = document.getElementById("whatsappWidgetCard");
+const whatsappChatIcon = document.querySelector('[data-whatsapp-icon="chat"]');
+const whatsappCloseIcon = document.querySelector('[data-whatsapp-icon="close"]');
+
+const syncWhatsAppWidget = (isOpen) => {
+    if (!whatsappWidget || !whatsappWidgetToggle || !whatsappWidgetCard) {
+        return;
+    }
+
+    whatsappWidget.classList.toggle("is-open", isOpen);
+    whatsappWidgetToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    whatsappWidgetToggle.setAttribute("aria-label", isOpen ? "Close WhatsApp chat" : "Open WhatsApp chat");
+    whatsappWidgetCard.hidden = !isOpen;
+    whatsappWidgetCard.setAttribute("aria-hidden", isOpen ? "false" : "true");
+
+    if (whatsappChatIcon) {
+        whatsappChatIcon.hidden = isOpen;
+    }
+    if (whatsappCloseIcon) {
+        whatsappCloseIcon.hidden = !isOpen;
+    }
+};
+
+if (whatsappWidget && whatsappWidgetToggle && whatsappWidgetCard) {
+    syncWhatsAppWidget(false);
+
+    whatsappWidgetToggle.addEventListener("click", () => {
+        const isOpen = whatsappWidgetToggle.getAttribute("aria-expanded") === "true";
+        syncWhatsAppWidget(!isOpen);
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!whatsappWidget.classList.contains("is-open")) {
+            return;
+        }
+
+        if (!whatsappWidget.contains(event.target)) {
+            syncWhatsAppWidget(false);
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && whatsappWidget.classList.contains("is-open")) {
+            syncWhatsAppWidget(false);
+        }
+    });
+}
+
 document.querySelectorAll("[data-counter]").forEach((counter) => {
     const rawValue = counter.dataset.counter || counter.textContent;
     const numeric = parseInt(String(rawValue).replace(/[^\d]/g, ""), 10);

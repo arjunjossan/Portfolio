@@ -145,7 +145,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-slate-950 font-body text-slate-100 selection:bg-teal/30 selection:text-white">
+<body class="page-{{ page_name|default:'default' }} bg-slate-950 font-body text-slate-100 selection:bg-teal/30 selection:text-white">
     <div class="site-shell">
         {% include "includes/header.html" %}
         <main>

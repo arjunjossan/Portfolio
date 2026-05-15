@@ -1,8 +1,8 @@
-<footer class="border-t border-white/10 bg-slate-950/95 px-4 py-12 sm:px-6 lg:px-8">
+<footer class="site-footer border-t border-white/10 bg-slate-950/95 px-4 py-12 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-6xl">
         <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr_0.8fr] lg:items-start">
             <div class="space-y-4">
-                <p class="font-display text-2xl font-bold text-white">{{ site_config.site_name|default:"Portfolio" }}</p>
+                <p class="site-footer-title font-display text-2xl font-bold text-white">{{ site_config.site_name|default:"Portfolio" }}</p>
                 {% if site_config.footer_note %}
                     <p class="max-w-md text-sm leading-7 text-slate-400">{{ site_config.footer_note }}</p>
                 {% endif %}
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div id="footer-subscribe" class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-soft backdrop-blur">
+            <div id="footer-subscribe" class="site-footer-subscribe rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-soft backdrop-blur">
                 <p class="text-xs font-semibold uppercase tracking-[0.22em] text-teal-100">Stay Updated</p>
                 <form method="post" action="{% url 'portfolio_app:home' %}" class="mt-4 flex flex-col gap-3 md:flex-row md:items-center" novalidate>
                     {% csrf_token %}
@@ -26,7 +26,7 @@
                         type="email"
                         required
                         placeholder="Enter your email for updates"
-                        class="block w-full rounded-full border border-white/10 bg-slate-900/80 px-5 py-3.5 text-white placeholder:text-slate-500 focus:border-teal focus:ring-teal"
+                        class="site-footer-input block w-full rounded-full border border-white/10 bg-slate-900/80 px-5 py-3.5 text-white placeholder:text-slate-500 focus:border-teal focus:ring-teal"
                     >
                     <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-slate-950 transition duration-300 hover:-translate-y-1 hover:bg-slate-100">
                         Subscribe
@@ -37,15 +37,15 @@
             </div>
 
             <div class="flex flex-col gap-6 lg:items-end">
-                <div class="w-full rounded-[1.5rem] border border-white/10 bg-white/5 p-5 backdrop-blur lg:max-w-xs">
+                <div class="site-footer-nav w-full rounded-[1.5rem] border border-white/10 bg-white/5 p-5 backdrop-blur lg:max-w-xs">
                     <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Navigate</p>
                     <div class="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm text-slate-300">
-                        <a href="{% url 'portfolio_app:about' %}" class="transition hover:text-white">About</a>
-                        <a href="{% url 'portfolio_app:skills' %}" class="transition hover:text-white">Skills</a>
-                        <a href="{% url 'portfolio_app:projects' %}" class="transition hover:text-white">Projects</a>
-                        <a href="{% url 'portfolio_app:experience' %}" class="transition hover:text-white">Experience</a>
-                        <a href="{% url 'portfolio_app:education' %}" class="transition hover:text-white">Education</a>
-                        <a href="{% url 'portfolio_app:contact' %}" class="transition hover:text-white">Contact</a>
+                        <a href="{% url 'portfolio_app:about' %}" class="site-footer-link transition hover:text-white">About</a>
+                        <a href="{% url 'portfolio_app:skills' %}" class="site-footer-link transition hover:text-white">Skills</a>
+                        <a href="{% url 'portfolio_app:projects' %}" class="site-footer-link transition hover:text-white">Projects</a>
+                        <a href="{% url 'portfolio_app:experience' %}" class="site-footer-link transition hover:text-white">Experience</a>
+                        <a href="{% url 'portfolio_app:education' %}" class="site-footer-link transition hover:text-white">Education</a>
+                        <a href="{% url 'portfolio_app:contact' %}" class="site-footer-link transition hover:text-white">Contact</a>
                     </div>
                 </div>
                 {% if global_social_links %}
@@ -59,7 +59,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="mt-8 border-t border-white/10 pt-6 text-sm text-slate-500">
+        <div class="site-footer-meta mt-8 border-t border-white/10 pt-6 text-sm text-slate-500">
             © 2026 {{ site_config.site_name|default:"Portfolio" }}. All rights reserved.
         </div>
     </div>

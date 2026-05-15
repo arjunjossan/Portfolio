@@ -2118,6 +2118,13 @@ html.light .hero-main-subtitle {
     color: #334155;
 }
 
+html.light .home-hero-backdrop {
+    background:
+        radial-gradient(circle at top left, rgba(29, 157, 139, 0.14), transparent 26%),
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 22%),
+        linear-gradient(180deg, #f9fbff 0%, #eef4fb 52%, #f8fafc 100%);
+}
+
 html.light .hero-card,
 html.light .content-panel,
 html.light .project-card,
@@ -2162,6 +2169,220 @@ html.light .filter-form input[type="text"]::placeholder {
 html.light .filter-form select option {
     background: rgb(255 255 255);
     color: rgb(15 23 42);
+}
+
+html.light .site-header-bar {
+    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.74);
+    box-shadow: 0 22px 46px rgba(15, 23, 42, 0.08);
+}
+
+html.light .site-header-brand-name {
+    color: #08111f;
+}
+
+html.light .nav-link {
+    color: #475569;
+}
+
+html.light .nav-link:hover,
+html.light .nav-link.is-active,
+html.light .mobile-nav-link:hover {
+    color: #08111f;
+}
+
+html.light .nav-link::after {
+    background: linear-gradient(90deg, rgba(14, 116, 144, 0.22), rgba(20, 184, 166, 0.9));
+}
+
+html.light .icon-btn {
+    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+html.light .icon-btn:hover {
+    border-color: rgba(15, 23, 42, 0.16);
+    background: rgba(255, 255, 255, 0.96);
+    color: #08111f;
+}
+
+html.light .site-mobile-menu {
+    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 20px 44px rgba(15, 23, 42, 0.08);
+}
+
+html.light .mobile-nav-link {
+    background: rgba(15, 23, 42, 0.04);
+    color: #334155;
+}
+
+html.light .site-header-resume-link {
+    background: #0f172a;
+    color: #f8fafc;
+}
+
+html.light .site-header-resume-link:hover {
+    background: #1e293b;
+}
+
+html.light .site-footer {
+    border-color: rgba(15, 23, 42, 0.08);
+    background:
+        radial-gradient(circle at top left, rgba(44, 165, 245, 0.08), transparent 24%),
+        radial-gradient(circle at top right, rgba(22, 184, 160, 0.08), transparent 20%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(241, 245, 249, 0.96));
+}
+
+html.light .site-footer-title {
+    color: #08111f;
+}
+
+html.light .site-footer [class~="text-slate-300"] {
+    color: #475569;
+}
+
+html.light .site-footer [class~="text-slate-400"],
+html.light .site-footer [class~="text-slate-500"] {
+    color: #64748b;
+}
+
+html.light .site-footer [class~="text-teal-100"] {
+    color: #0f766e;
+}
+
+html.light .site-footer [class*="border-white/10"] {
+    border-color: rgba(15, 23, 42, 0.08);
+}
+
+html.light .site-footer [class*="bg-white/5"] {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+html.light .site-footer-subscribe,
+html.light .site-footer-nav {
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
+}
+
+html.light .site-footer-input {
+    border-color: rgba(15, 23, 42, 0.1);
+    background: rgba(248, 250, 252, 0.96);
+    color: #08111f;
+}
+
+html.light .site-footer-input::placeholder {
+    color: #64748b;
+}
+
+html.light .site-footer-link {
+    color: #475569;
+}
+
+html.light .site-footer-link:hover {
+    color: #08111f;
+}
+
+html.light .site-footer .icon-btn {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+html.light .site-footer-meta {
+    border-color: rgba(15, 23, 42, 0.08);
+    color: #64748b;
+}
+
+html.light .site-breadcrumb {
+    color: #64748b;
+}
+
+html.light .site-breadcrumb a {
+    color: #475569;
+}
+
+html.light .site-breadcrumb a:hover {
+    color: #08111f;
+}
+
+html.light .site-breadcrumb .text-slate-200 {
+    color: #0f172a;
+}
+
+html.light .site-pagination {
+    border-color: rgba(15, 23, 42, 0.08);
+}
+
+html.light .site-pagination p {
+    color: #64748b;
+}
+
+html.light .site-pagination-link {
+    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.88);
+    color: #334155;
+}
+
+html.light .site-pagination-link:hover {
+    border-color: rgba(15, 23, 42, 0.16);
+    background: rgba(255, 255, 255, 0.98);
+    color: #08111f;
+}
+
+html.light main [class*="bg-slate-950/70"],
+html.light main [class*="bg-slate-900/95"],
+html.light main [class*="bg-slate-900/80"],
+html.light main [class*="bg-slate-900/70"],
+html.light main [class*="bg-slate-900/60"] {
+    background: rgba(255, 255, 255, 0.84);
+}
+
+html.light main [class*="bg-white/5"] {
+    background-color: rgba(255, 255, 255, 0.76);
+}
+
+html.light main [class*="bg-white/10"] {
+    background-color: rgba(255, 255, 255, 0.88);
+}
+
+html.light main [class*="border-white/10"] {
+    border-color: rgba(15, 23, 42, 0.08);
+}
+
+html.light main [class*="border-white/15"] {
+    border-color: rgba(15, 23, 42, 0.12);
+}
+
+html.light main [class*="bg-slate-950/70"] [class~="text-white"],
+html.light main [class*="bg-slate-900/95"] [class~="text-white"],
+html.light main [class*="bg-slate-900/80"] [class~="text-white"],
+html.light main [class*="bg-slate-900/70"] [class~="text-white"],
+html.light main [class*="bg-slate-900/60"] [class~="text-white"],
+html.light main [class*="bg-white/5"] [class~="text-white"] {
+    color: #08111f;
+}
+
+html.light main [class*="bg-slate-950/70"] [class~="text-slate-300"],
+html.light main [class*="bg-slate-900/95"] [class~="text-slate-300"],
+html.light main [class*="bg-slate-900/80"] [class~="text-slate-300"],
+html.light main [class*="bg-slate-900/70"] [class~="text-slate-300"],
+html.light main [class*="bg-slate-900/60"] [class~="text-slate-300"],
+html.light main [class*="bg-white/5"] [class~="text-slate-300"] {
+    color: #475569;
+}
+
+html.light main [class*="bg-slate-950/70"] [class~="text-slate-400"],
+html.light main [class*="bg-slate-900/95"] [class~="text-slate-400"],
+html.light main [class*="bg-slate-900/80"] [class~="text-slate-400"],
+html.light main [class*="bg-slate-900/70"] [class~="text-slate-400"],
+html.light main [class*="bg-slate-900/60"] [class~="text-slate-400"],
+html.light main [class*="bg-white/5"] [class~="text-slate-400"],
+html.light main [class*="bg-slate-950/70"] [class~="text-slate-500"],
+html.light main [class*="bg-slate-900/95"] [class~="text-slate-500"],
+html.light main [class*="bg-slate-900/80"] [class~="text-slate-500"],
+html.light main [class*="bg-slate-900/70"] [class~="text-slate-500"],
+html.light main [class*="bg-slate-900/60"] [class~="text-slate-500"],
+html.light main [class*="bg-white/5"] [class~="text-slate-500"] {
+    color: #64748b;
 }
 
 html.light .contact-page::before {

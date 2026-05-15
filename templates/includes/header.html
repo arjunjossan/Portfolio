@@ -1,10 +1,10 @@
-<header x-data="{ open: false }" class="fixed inset-x-0 top-0 z-50">
+<header x-data="{ open: false }" class="site-header fixed inset-x-0 top-0 z-50">
     <div class="mx-auto mt-4 max-w-6xl px-4 sm:px-6 lg:px-8">
-        <nav class="rounded-full border border-white/10 bg-slate-950/70 px-4 py-3 shadow-soft backdrop-blur-xl">
+        <nav class="site-header-bar rounded-full border border-white/10 bg-slate-950/70 px-4 py-3 shadow-soft backdrop-blur-xl">
             <div class="flex items-center justify-between gap-4">
                 <a href="{% url 'portfolio_app:home' %}" class="flex items-center gap-3">
                     <span class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-teal to-cyan-300 font-display text-lg font-bold text-slate-950">{{ site_config.logo_text|default:"AS"|slice:":2" }}</span>
-                    <span class="hidden font-display text-base font-semibold tracking-[0.2em] text-white sm:block">{{ site_config.site_name|default:"Portfolio" }}</span>
+                    <span class="site-header-brand-name hidden font-display text-base font-semibold tracking-[0.2em] text-white sm:block">{{ site_config.site_name|default:"Portfolio" }}</span>
                 </a>
                 <div class="hidden items-center gap-6 lg:flex">
                     <a href="{% url 'portfolio_app:home' %}" class="nav-link {% if page_name == 'home' %}is-active{% endif %}">Home</a>
@@ -20,7 +20,7 @@
                         </button>
                     {% endif %}
                     {% if global_contact and global_contact.resume_pdf and global_contact.cv_download_enabled %}
-                        <a href="{% url 'portfolio_app:resume' %}#resume-preview" class="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-slate-100">
+                        <a href="{% url 'portfolio_app:resume' %}#resume-preview" class="site-header-resume-link rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-slate-100">
                             {{ site_config.resume_label|default:"Download CV" }}
                         </a>
                     {% endif %}
@@ -36,7 +36,7 @@
                     </button>
                 </div>
             </div>
-            <div x-show="open" x-transition class="mt-4 space-y-3 rounded-3xl border border-white/10 bg-slate-900/95 p-5 lg:hidden">
+            <div x-show="open" x-transition class="site-mobile-menu mt-4 space-y-3 rounded-3xl border border-white/10 bg-slate-900/95 p-5 lg:hidden">
                 <a href="{% url 'portfolio_app:home' %}" class="mobile-nav-link" @click="open = false">Home</a>
                 <a href="{% url 'portfolio_app:about' %}" class="mobile-nav-link" @click="open = false">About</a>
                 <a href="{% url 'portfolio_app:skills' %}" class="mobile-nav-link" @click="open = false">Skills</a>
@@ -45,7 +45,7 @@
                 <a href="{% url 'portfolio_app:education' %}" class="mobile-nav-link" @click="open = false">Education</a>
                 <a href="{% url 'portfolio_app:contact' %}" class="mobile-nav-link" @click="open = false">Contact</a>
                 {% if global_contact and global_contact.resume_pdf and global_contact.cv_download_enabled %}
-                    <a href="{% url 'portfolio_app:resume' %}#resume-preview" class="block rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950">
+                    <a href="{% url 'portfolio_app:resume' %}#resume-preview" class="site-header-resume-link block rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-slate-950">
                         {{ site_config.resume_label|default:"Download CV" }}
                     </a>
                 {% endif %}
